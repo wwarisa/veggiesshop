@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup ร้านผัก — หน้าเลือกสินค้า &amp; หน้าแก้ราคาประจำวัน</title>
+
+<style>
+  /* ── โทนสี: ตลาดสดตอนเช้า — ใบผัก + ป้ายราคาสีส้มแดงแบบแผงผัก ───────── */
+  :root {
+    --ground:      #E7ECE3;
+    --surface:     #FFFFFF;
+    --surface-2:   #F4F6F1;
+    --line:        #D8DFD3;
+    --line-strong: #BFC9B9;
+    --ink:         #16211A;
+    --ink-2:       #4C574C;
+    --ink-3:       #77816F;
+    --leaf:        #37702F;
+    --leaf-deep:   #24501E;
+    --leaf-soft:   #E6F0E1;
+    --head-bg:     #24501E;
+    --price:       #BF3E07;
+    --price-soft:  #FBEBE1;
+    --warn:        #9A5B00;
+    --warn-soft:   #FBF0DC;
+    --danger:      #A82A21;
+    --muted:       #8A907F;
+    --shadow:      0 1px 2px rgba(22,33,26,.06), 0 8px 24px -14px rgba(22,33,26,.35);
+    --radius:      14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E130D;
+      --surface:     #191F17;
+      --surface-2:   #212820;
+      --line:        #2E372C;
+      --line-strong: #3E4A3B;
+      --ink:         #E9EEE5;
+      --ink-2:       #B4BEAF;
+      --ink-3:       #8C9787;
+      --leaf:        #86C075;
+      --leaf-deep:   #A6D697;
+      --leaf-soft:   #22301F;
+      --head-bg:     #1B2C18;
+      --price:       #FF9257;
+      --price-soft:  #352117;
+      --warn:        #E0A448;
+      --warn-soft:   #2E2515;
+      --danger:      #F2857C;
+      --muted:       #7E8878;
+      --shadow:      0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:      #0E130D;
+    --surface:     #191F17;
+    --surface-2:   #212820;
+    --line:        #2E372C;
+    --line-strong: #3E4A3B;
+    --ink:         #E9EEE5;
+    --ink-2:       #B4BEAF;
+    --ink-3:       #8C9787;
+    --leaf:        #86C075;
+    --leaf-deep:   #A6D697;
+    --leaf-soft:   #22301F;
+    --head-bg:     #1B2C18;
+    --price:       #FF9257;
+    --price-soft:  #352117;
+    --warn:        #E0A448;
+    --warn-soft:   #2E2515;
+    --danger:      #F2857C;
+    --muted:       #7E8878;
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    /* ฟอนต์ไทยที่ติดมากับเครื่องอยู่แล้ว — ไม่ต้องโหลดจากเน็ต หน้าเว็บจึงขึ้นไว */
+    font-family: "Sarabun", "Noto Sans Thai", "IBM Plex Sans Thai", "Leelawadee UI",
+                 "Thonburi", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  button { font: inherit; color: inherit; cursor: pointer; }
+  input  { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; border-radius: 6px; }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ── แถบบนสุด: ตัวสลับหน้า (เป็นส่วนของ mockup ไม่ใช่ของเว็บจริง) ────── */
+  .deck {
+    position: sticky; top: 0; z-index: 60;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  .deck-in {
+    max-width: 880px; margin-inline: auto;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .deck-tag {
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 700; white-space: nowrap;
+  }
+  .segmented {
+    display: flex; gap: 4px; padding: 4px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 999px; margin-inline-start: auto;
+  }
+  .segmented button {
+    border: 0; background: transparent; color: var(--ink-2);
+    padding: 9px 16px; border-radius: 999px; font-weight: 600; font-size: 14px;
+    min-height: 40px;
+  }
+  .segmented button[aria-pressed="true"] {
+    background: var(--leaf); color: #fff; box-shadow: var(--shadow);
+  }
+  /* ── กรอบมือถือ ─────────────────────────────────────────────────────── */
+  .stage { padding: 20px 16px 40px; }
+  .phone {
+    max-width: 460px; margin-inline: auto;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+  .wide { max-width: 760px; margin-inline: auto; }
+
+  .caption {
+    max-width: 460px; margin: 0 auto 14px;
+    font-size: 13px; color: var(--ink-3); text-align: center;
+  }
+  .wide + .caption, .caption.wide { max-width: 760px; }
+
+  /* ── หัวเว็บฝั่งลูกค้า ────────────────────────────────────────────────── */
+  .shop-head {
+    background: var(--head-bg);
+    color: #F2F7EF;
+    padding: 14px 16px 16px;
+  }
+  .shop-title { display: flex; align-items: center; gap: 10px; }
+  .mark {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: rgba(255,255,255,.14);
+    display: grid; place-items: center; font-size: 21px; flex: none;
+  }
+  .shop-name { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+  .shop-sub  { font-size: 12.5px; opacity: .82; }
+  .head-note {
+    margin-top: 12px; display: flex; gap: 8px; align-items: flex-start;
+    background: rgba(255,255,255,.11); border-radius: 10px; padding: 9px 11px;
+    font-size: 13px; line-height: 1.45;
+  }
+
+  .sticky-tools {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 12px 8px;
+  }
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 12px; padding: 0 12px; height: 46px;
+  }
+  .search input { border: 0; background: transparent; width: 100%; height: 100%; outline: none; }
+  .search input::placeholder { color: var(--muted); }
+
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 2px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; border: 1px solid var(--line-strong); background: var(--surface);
+    color: var(--ink-2); border-radius: 999px; padding: 8px 15px;
+    font-size: 14.5px; font-weight: 600; min-height: 42px; white-space: nowrap;
+  }
+  .chip[aria-pressed="true"] { background: var(--leaf); border-color: var(--leaf); color: #fff; }
+
+  /* ── การ์ดสินค้า ──────────────────────────────────────────────────────── */
+  .list { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .group-label {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-3); padding: 6px 2px 0;
+  }
+  .card {
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--surface); padding: 12px; display: flex; gap: 12px;
+  }
+  .card.in-cart { border-color: var(--leaf); box-shadow: inset 0 0 0 1px var(--leaf); }
+  .card.out     { opacity: .62; }
+
+  .thumb {
+    width: 92px; height: 92px; flex: none; border-radius: 11px;
+    background: var(--leaf-soft);
+    display: grid; place-items: center; font-size: 42px; position: relative;
+    line-height: 1;
+  }
+  .card.out .thumb { filter: grayscale(1); }
+  .out-badge {
+    position: absolute; inset-inline: 6px; bottom: 6px;
+    background: var(--ink); color: var(--surface);
+    font-size: 11.5px; font-weight: 700; text-align: center;
+    border-radius: 6px; padding: 3px 0;
+  }
+
+  .card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .p-name { font-size: 18px; font-weight: 700; line-height: 1.25; }
+  .p-note { font-size: 12.5px; color: var(--ink-3); }
+
+  .units { display: flex; gap: 6px; flex-wrap: wrap; }
+  .unit {
+    border: 1px solid var(--line-strong); background: var(--surface);
+    border-radius: 10px; padding: 6px 10px; min-height: 42px;
+    display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;
+  }
+  .unit[aria-pressed="true"] { border-color: var(--price); background: var(--price-soft); }
+  .unit .u-label { font-size: 12px; color: var(--ink-2); }
+  .unit .u-price { font-size: 15px; font-weight: 700; color: var(--price); }
+  .unit:disabled { opacity: .5; cursor: not-allowed; }
+
+  .buy { display: flex; flex-direction: column; gap: 8px; }
+  .pricerow { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .price-now { font-size: 22px; font-weight: 800; color: var(--price); letter-spacing: -.01em; white-space: nowrap; }
+  .price-unit { font-size: 13.5px; font-weight: 600; color: var(--ink-3); white-space: nowrap; }
+
+  /* แถบบวก-ลบเต็มความกว้าง — กดด้วยนิ้วโป้งขณะยืนหน้าแผงผักได้ */
+  .stepper { display: flex; align-items: center; gap: 8px; }
+  .step-btn {
+    flex: 1; height: 52px; border-radius: 12px;
+    border: 1px solid var(--line-strong); background: var(--surface-2);
+    font-size: 24px; font-weight: 700; line-height: 1;
+    display: grid; place-items: center;
+  }
+  .step-btn:active { transform: scale(.94); }
+  .step-btn.plus { background: var(--leaf); border-color: var(--leaf); color: #fff; }
+  .step-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+  .qty { flex: none; width: 64px; text-align: center; font-size: 20px; font-weight: 800; }
+  .qty.zero { color: var(--muted); font-weight: 600; }
+
+  .line-total {
+    margin-top: 2px; background: var(--leaf-soft); color: var(--leaf-deep);
+    border-radius: 9px; padding: 7px 10px; font-size: 14px; font-weight: 600;
+    display: flex; justify-content: space-between;
+  }
+
+  .empty { padding: 44px 20px; text-align: center; color: var(--ink-3); }
+
+  /* ── แถบยอดรวมลอยล่าง ──────────────────────────────────────────────── */
+  .cartbar {
+    position: sticky; bottom: 0; z-index: 30;
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cartbar .sum { flex: 1; min-width: 0; }
+  .sum-count { font-size: 12.5px; color: var(--ink-3); }
+  .sum-total { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+  .cta {
+    border: 0; background: var(--leaf); color: #fff;
+    border-radius: 13px; min-height: 54px; padding: 0 22px;
+    font-size: 17px; font-weight: 700;
+  }
+  .cta:disabled { background: var(--line-strong); color: var(--ink-3); cursor: not-allowed; }
+
+  /* ── หน้าแก้ราคาประจำวัน (หลังบ้าน) ──────────────────────────────────── */
+  .admin { background: var(--surface); border: 1px solid var(--line);
+           border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+  .admin-head { padding: 16px 16px 14px; border-bottom: 1px solid var(--line); }
+  .admin-h1 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .admin-date { font-size: 14px; color: var(--ink-3); margin-top: 2px; }
+  .admin-hint {
+    margin-top: 12px; background: var(--warn-soft); color: var(--warn);
+    border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45;
+    display: flex; gap: 8px;
+  }
+
+  .admin-tools { position: sticky; top: 0; z-index: 20;
+                 background: var(--surface); border-bottom: 1px solid var(--line); padding: 10px 12px; }
+
+  .prow { border-bottom: 1px solid var(--line); padding: 12px; }
+  .prow:last-child { border-bottom: 0; }
+  .prow-head { display: flex; align-items: center; gap: 10px; }
+  .prow-thumb { width: 44px; height: 44px; border-radius: 10px; background: var(--leaf-soft);
+                display: grid; place-items: center; font-size: 23px; flex: none; line-height: 1; }
+  .prow.off .prow-thumb { filter: grayscale(1); }
+  .prow-name { font-size: 17px; font-weight: 700; flex: 1; min-width: 0; }
+  .prow.off .prow-name { color: var(--ink-3); }
+
+  .toggle { display: flex; gap: 3px; padding: 3px; background: var(--surface-2);
+            border: 1px solid var(--line); border-radius: 999px; flex: none; }
+  .toggle button { border: 0; background: transparent; border-radius: 999px;
+                   padding: 0 12px; min-height: 38px; font-size: 13.5px; font-weight: 700; color: var(--ink-3); }
+  .toggle button[aria-pressed="true"].on  { background: var(--leaf); color: #fff; }
+  .toggle button[aria-pressed="true"].off { background: var(--danger); color: #fff; }
+
+  .urow { display: flex; align-items: center; gap: 10px; padding: 9px 0 0; }
+  .urow + .urow { border-top: 1px dashed var(--line); margin-top: 8px; }
+  .urow.changed { background: var(--price-soft); border-radius: 10px;
+                  padding: 9px 10px; margin-top: 8px; border-top: 0; }
+  .u-meta { flex: 1; min-width: 0; }
+  .u-name { font-size: 15px; font-weight: 600; }
+  .u-was  { font-size: 12.5px; color: var(--ink-3); }
+  .u-was strong { color: var(--price); font-weight: 700; }
+
+  .price-edit { display: flex; align-items: center; gap: 4px; flex: none; }
+  .pbtn { width: 44px; height: 48px; border-radius: 11px; border: 1px solid var(--line-strong);
+          background: var(--surface-2); font-size: 22px; font-weight: 700; display: grid; place-items: center; }
+  .pbtn:active { transform: scale(.94); }
+  .price-input {
+    width: 78px; height: 48px; border-radius: 11px; border: 1.5px solid var(--line-strong);
+    background: var(--surface); text-align: center; font-size: 19px; font-weight: 800;
+    font-variant-numeric: tabular-nums; outline: none;
+  }
+  .price-input:focus { border-color: var(--leaf); }
+  .urow.changed .price-input { border-color: var(--price); color: var(--price); }
+  .baht { font-size: 15px; color: var(--ink-3); font-weight: 600; }
+  .prow.off .price-edit { opacity: .45; pointer-events: none; }
+
+  .hist-btn { border: 0; background: transparent; color: var(--leaf);
+              font-size: 13px; font-weight: 700; padding: 8px 2px; min-height: 40px; }
+  .hist { margin-top: 6px; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+  .hist li { font-size: 13px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 12px; }
+  .hist ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+  .savebar {
+    position: sticky; bottom: 0; z-index: 30;
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    display: flex; align-items: center; gap: 12px;
+  }
+  .savebar .sum { flex: 1; }
+  .save-count { font-size: 13px; color: var(--ink-3); }
+  .save-count b { color: var(--price); }
+
+  .toast {
+    position: fixed; left: 50%; transform: translate(-50%, 20px);
+    bottom: 26px; z-index: 90;
+    background: var(--head-bg); color: #F2F7EF;
+    padding: 13px 20px; border-radius: 12px; font-weight: 600; font-size: 15px;
+    box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease;
+    max-width: min(92vw, 420px); text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) {
+    .toast { transition: none; }
+    .step-btn:active, .pbtn:active { transform: none; }
+  }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+
+
+<div class="deck">
+  <div class="deck-in">
+    <span class="deck-tag">Mockup · ยังไม่ใช่ระบบจริง</span>
+    <div class="segmented" role="group" aria-label="สลับหน้าที่ดู">
+      <button type="button" id="tab-shop"   aria-pressed="true">หน้าลูกค้า</button>
+      <button type="button" id="tab-prices" aria-pressed="false">หน้าแก้ราคา</button>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <!-- ══════════ หน้าที่ 1 : ลูกค้าเลือกสินค้า ══════════ -->
+  <section id="screen-shop">
+    <p class="caption">ลูกค้าเปิดจากมือถือ · กดบวก-ลบแล้วยอดรวมด้านล่างขยับทันที</p>
+    <div class="phone">
+      <header class="shop-head">
+        <div class="shop-title">
+          <div class="mark" aria-hidden="true">🥬</div>
+          <div>
+            <div class="shop-name">[ชื่อร้าน]</div>
+            <div class="shop-sub">ผักสดส่งถึงบ้าน · เก็บเงินปลายทาง</div>
+          </div>
+        </div>
+        <div class="head-note">
+          <span aria-hidden="true">📣</span>
+          <span>วันนี้ผักบุ้งเพิ่งเก็บเช้านี้ ปิดรับออเดอร์ <b>15:00 น.</b> ส่งรอบเย็นวันเดียวกัน</span>
+        </div>
+      </header>
+
+      <div class="sticky-tools">
+        <label class="search">
+          <span aria-hidden="true">🔍</span>
+          <input type="search" id="q" placeholder="ค้นหาผัก เช่น ผักบุ้ง มะนาว" aria-label="ค้นหาสินค้า">
+        </label>
+        <div class="chips" id="chips" role="group" aria-label="หมวดหมู่สินค้า"></div>
+      </div>
+
+      <div class="list" id="products"></div>
+
+      <div class="cartbar">
+        <div class="sum">
+          <div class="sum-count num" id="cart-count">ยังไม่ได้เลือกสินค้า</div>
+          <div class="sum-total num" id="cart-total">0 บาท</div>
+        </div>
+        <button type="button" class="cta" id="checkout" disabled>ดูตะกร้า</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ หน้าที่ 2 : หลังบ้าน แก้ราคาประจำวัน ══════════ -->
+  <section id="screen-prices" hidden>
+    <p class="caption wide">เจ้าของร้านเปิดตอนเช้า · แก้ตัวเลขทั้งหน้า แล้วกดบันทึกครั้งเดียวจบ</p>
+    <div class="wide">
+      <div class="admin">
+        <div class="admin-head">
+          <div class="admin-h1">แก้ราคาประจำวัน</div>
+          <div class="admin-date">ศุกร์ที่ 7 สิงหาคม · ราคาที่แก้จะขึ้นหน้าเว็บทันทีที่กดบันทึก</div>
+          <div class="admin-hint">
+            <span aria-hidden="true">💡</span>
+            <span>แก้ได้ทุกช่องในหน้าเดียว ยังไม่ต้องกดบันทึกทีละอัน · ถ้าของหมดให้กดปุ่ม <b>ของหมด</b> ลูกค้าจะสั่งไม่ได้ทันที</span>
+          </div>
+        </div>
+
+        <div class="admin-tools">
+          <label class="search">
+            <span aria-hidden="true">🔍</span>
+            <input type="search" id="aq" placeholder="พิมพ์ชื่อผักเพื่อหาให้ไว" aria-label="ค้นหาสินค้าในหน้าแก้ราคา">
+          </label>
+        </div>
+
+        <div id="price-rows"></div>
+
+        <div class="savebar">
+          <div class="sum">
+            <div class="save-count" id="save-count">ยังไม่ได้แก้อะไร</div>
+            <div style="font-size:13px;color:var(--ink-3)">แก้เสร็จแล้วกดบันทึกครั้งเดียว</div>
+          </div>
+          <button type="button" class="cta" id="save" disabled>บันทึกราคา</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ─────────────────────────────────────────────────────────────────────
+     ข้อมูลตัวอย่าง — ผักไทยที่ขายจริงในตลาดสด ราคาสมจริง
+     ในระบบจริงข้อมูลชุดนี้มาจากฐานข้อมูล เจ้าของร้านแก้เองได้ทั้งหมด
+  ───────────────────────────────────────────────────────────────────── */
+  var CATEGORIES = [
+    { id: "all",   name: "ทั้งหมด" },
+    { id: "leaf",  name: "ผักใบ" },
+    { id: "herb",  name: "สมุนไพร เครื่องแกง" },
+    { id: "fruit", name: "ผักผล" },
+    { id: "root",  name: "หัว หอม กระเทียม" },
+    { id: "etc",   name: "ไข่ และอื่นๆ" }
+  ];
+
+  var PRODUCTS = [
+    { id:"p01", cat:"leaf",  name:"ผักบุ้งจีน",       emoji:"🥬", note:"เก็บเช้านี้ ก้านกรอบ", on:true,
+      units:[{id:"u1",label:"มัด",price:15,was:15,step:1},{id:"u2",label:"กิโลกรัม",price:45,was:40,step:0.5}] },
+    { id:"p02", cat:"leaf",  name:"คะน้ายอด",         emoji:"🥬", note:"ยอดอ่อน ไม่แก่", on:true,
+      units:[{id:"u1",label:"ขีด",price:7,was:7,step:1},{id:"u2",label:"กิโลกรัม",price:60,was:65,step:0.5}] },
+    { id:"p03", cat:"leaf",  name:"ผักกาดขาวปลี",     emoji:"🥬", note:"", on:true,
+      units:[{id:"u1",label:"กิโลกรัม",price:35,was:35,step:0.5}] },
+    { id:"p04", cat:"leaf",  name:"กะหล่ำปลี",        emoji:"🥬", note:"หัวแน่น", on:true,
+      units:[{id:"u1",label:"หัว",price:35,was:35,step:1},{id:"u2",label:"กิโลกรัม",price:30,was:30,step:0.5}] },
+    { id:"p05", cat:"leaf",  name:"ผักกาดหอม",        emoji:"🥗", note:"", on:false,
+      units:[{id:"u1",label:"กิโลกรัม",price:70,was:70,step:0.5}] },
+    { id:"p06", cat:"herb",  name:"ต้นหอม",           emoji:"🌿", note:"", on:true,
+      units:[{id:"u1",label:"ขีด",price:12,was:10,step:1},{id:"u2",label:"กิโลกรัม",price:110,was:95,step:0.5}] },
+    { id:"p07", cat:"herb",  name:"ผักชี",            emoji:"🌿", note:"หอม รากติดมาด้วย", on:true,
+      units:[{id:"u1",label:"ขีด",price:15,was:12,step:1}] },
+    { id:"p08", cat:"herb",  name:"ใบกะเพรา",         emoji:"🌱", note:"", on:true,
+      units:[{id:"u1",label:"ถุง",price:10,was:10,step:1},{id:"u2",label:"ขีด",price:20,was:20,step:1}] },
+    { id:"p09", cat:"herb",  name:"ใบโหระพา",         emoji:"🌱", note:"", on:true,
+      units:[{id:"u1",label:"ถุง",price:10,was:10,step:1}] },
+    { id:"p10", cat:"herb",  name:"พริกขี้หนูสวน",     emoji:"🌶️", note:"เผ็ดจัด", on:true,
+      units:[{id:"u1",label:"ขีด",price:25,was:20,step:1},{id:"u2",label:"กิโลกรัม",price:230,was:190,step:0.5}] },
+    { id:"p11", cat:"herb",  name:"ตะไคร้",           emoji:"🌾", note:"", on:true,
+      units:[{id:"u1",label:"มัด",price:10,was:10,step:1}] },
+    { id:"p12", cat:"fruit", name:"มะนาว",            emoji:"🍋", note:"ลูกใหญ่ น้ำเยอะ", on:true,
+      units:[{id:"u1",label:"ลูก",price:5,was:4,step:1},{id:"u2",label:"ถุง 10 ลูก",price:45,was:38,step:1}] },
+    { id:"p13", cat:"fruit", name:"มะเขือเทศสีดา",     emoji:"🍅", note:"", on:true,
+      units:[{id:"u1",label:"กิโลกรัม",price:55,was:55,step:0.5}] },
+    { id:"p14", cat:"fruit", name:"แตงกวา",           emoji:"🥒", note:"", on:true,
+      units:[{id:"u1",label:"กิโลกรัม",price:40,was:45,step:0.5}] },
+    { id:"p15", cat:"fruit", name:"ถั่วฝักยาว",        emoji:"🫛", note:"", on:true,
+      units:[{id:"u1",label:"มัด",price:20,was:20,step:1},{id:"u2",label:"กิโลกรัม",price:65,was:65,step:0.5}] },
+    { id:"p16", cat:"fruit", name:"มะเขือเปราะ",       emoji:"🍆", note:"", on:false,
+      units:[{id:"u1",label:"กิโลกรัม",price:50,was:50,step:0.5}] },
+    { id:"p17", cat:"root",  name:"หอมแดง",           emoji:"🧅", note:"ศรีสะเกษ", on:true,
+      units:[{id:"u1",label:"ขีด",price:15,was:14,step:1},{id:"u2",label:"กิโลกรัม",price:140,was:130,step:0.5}] },
+    { id:"p18", cat:"root",  name:"กระเทียมไทย",       emoji:"🧄", note:"กลีบเล็ก หอม", on:true,
+      units:[{id:"u1",label:"ขีด",price:18,was:18,step:1}] },
+    { id:"p19", cat:"root",  name:"ขิงแก่",            emoji:"🫚", note:"", on:true,
+      units:[{id:"u1",label:"ขีด",price:12,was:12,step:1}] },
+    { id:"p20", cat:"etc",   name:"ไข่ไก่ เบอร์ 2",     emoji:"🥚", note:"", on:true,
+      units:[{id:"u1",label:"ฟอง",price:5,was:5,step:1},{id:"u2",label:"แผง 30 ฟอง",price:135,was:132,step:1}] }
+  ];
+
+  /* ประวัติราคาตัวอย่าง (ในระบบจริงมาจากตาราง price_history) */
+  var HISTORY = {
+    p01: [["6 ส.ค.","กิโลกรัม","35 → 40"],["4 ส.ค.","กิโลกรัม","42 → 35"],["1 ส.ค.","มัด","12 → 15"]],
+    p10: [["6 ส.ค.","ขีด","18 → 20"],["3 ส.ค.","กิโลกรัม","170 → 190"]],
+    p12: [["6 ส.ค.","ลูก","3 → 4"],["2 ส.ค.","ถุง 10 ลูก","32 → 38"]]
+  };
+
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var el = function (t, c, txt) {
+    var n = document.createElement(t);
+    if (c) n.className = c;
+    if (txt !== undefined) n.textContent = txt;
+    return n;
+  };
+  var baht = function (n) {
+    return (Math.round(n * 100) / 100).toLocaleString("th-TH", { maximumFractionDigits: 2 });
+  };
+
+  /* วาดหน้าใหม่ทุกครั้งที่กด ต้องไม่ทำให้ปุ่มที่เพิ่งกดหลุดโฟกัส (สำคัญกับคนใช้คีย์บอร์ด) */
+  function keepFocus(fn) {
+    var a = document.activeElement;
+    var fk = a && a.getAttribute ? a.getAttribute("data-fk") : null;
+    fn();
+    if (!fk) return;
+    var back = document.querySelector('[data-fk="' + fk + '"]');
+    if (back && !back.disabled) back.focus();
+  }
+
+  var toastEl = $("#toast"), toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 2600);
+  }
+
+  /* ════════ สลับหน้า ════════ */
+  var tabShop = $("#tab-shop"), tabPrices = $("#tab-prices");
+  function show(which) {
+    var isShop = which === "shop";
+    $("#screen-shop").hidden = !isShop;
+    $("#screen-prices").hidden = isShop;
+    tabShop.setAttribute("aria-pressed", String(isShop));
+    tabPrices.setAttribute("aria-pressed", String(!isShop));
+    window.scrollTo({ top: 0 });
+  }
+  tabShop.addEventListener("click", function () { show("shop"); });
+  tabPrices.addEventListener("click", function () { show("prices"); });
+
+  /* ════════════════════════════════════════════════════════════════════
+     หน้าที่ 1 — ลูกค้าเลือกสินค้า
+  ════════════════════════════════════════════════════════════════════ */
+  var activeCat = "all";
+  var query = "";
+  var picked = {};   /* productId -> unitId ที่ลูกค้าเลือกอยู่ */
+  var cart   = {};   /* productId|unitId -> จำนวน */
+
+  var chipWrap = $("#chips");
+  CATEGORIES.forEach(function (c) {
+    var b = el("button", "chip", c.name);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(c.id === activeCat));
+    b.addEventListener("click", function () {
+      activeCat = c.id;
+      Array.prototype.forEach.call(chipWrap.children, function (x, i) {
+        x.setAttribute("aria-pressed", String(CATEGORIES[i].id === activeCat));
+      });
+      renderShop();
+    });
+    chipWrap.appendChild(b);
+  });
+
+  $("#q").addEventListener("input", function (e) {
+    query = e.target.value.trim();
+    renderShop();
+  });
+
+  function unitOf(p) {
+    var id = picked[p.id] || p.units[0].id;
+    for (var i = 0; i < p.units.length; i++) { if (p.units[i].id === id) return p.units[i]; }
+    return p.units[0];
+  }
+
+  function renderShop() {
+    var host = $("#products");
+    host.textContent = "";
+
+    var list = PRODUCTS.filter(function (p) {
+      if (activeCat !== "all" && p.cat !== activeCat) return false;
+      if (query && p.name.indexOf(query) === -1) return false;
+      return true;
+    });
+
+    if (!list.length) {
+      var e = el("div", "empty");
+      e.appendChild(el("div", null, "ไม่เจอสินค้าที่ค้นหา"));
+      e.appendChild(el("div", null, "ลองพิมพ์ชื่อสั้นลง เช่น “ผัก” หรือ “พริก”"));
+      host.appendChild(e);
+      return;
+    }
+
+    list.forEach(function (p) {
+      var u   = unitOf(p);
+      var key = p.id + "|" + u.id;
+      var qty = cart[key] || 0;
+
+      var card = el("div", "card" + (p.on ? "" : " out") + (qty > 0 ? " in-cart" : ""));
+
+      var th = el("div", "thumb");
+      th.appendChild(el("span", null, p.emoji));
+      if (!p.on) th.appendChild(el("div", "out-badge", "ของหมด"));
+      card.appendChild(th);
+
+      var body = el("div", "card-body");
+      body.appendChild(el("div", "p-name", p.name));
+      if (p.note) body.appendChild(el("div", "p-note", p.note));
+
+      /* เลือกหน่วยขาย เมื่อมีมากกว่า 1 หน่วย */
+      if (p.units.length > 1) {
+        var units = el("div", "units");
+        p.units.forEach(function (uu) {
+          var b = el("button", "unit");
+          b.type = "button";
+          b.disabled = !p.on;
+          b.setAttribute("aria-pressed", String(uu.id === u.id));
+          b.setAttribute("data-fk", "unit:" + p.id + ":" + uu.id);
+          b.appendChild(el("span", "u-label", uu.label));
+          b.appendChild(el("span", "u-price num", baht(uu.price) + " ฿"));
+          b.addEventListener("click", function () {
+            keepFocus(function () { picked[p.id] = uu.id; renderShop(); });
+          });
+          units.appendChild(b);
+        });
+        body.appendChild(units);
+      }
+
+      var buy = el("div", "buy");
+      var pr  = el("div", "pricerow");
+      pr.appendChild(el("span", "price-now num", baht(u.price) + " บาท"));
+      pr.appendChild(el("span", "price-unit", "ต่อ" + u.label));
+      buy.appendChild(pr);
+
+      var st = el("div", "stepper");
+      var minus = el("button", "step-btn", "−");
+      minus.type = "button";
+      minus.disabled = !p.on || qty <= 0;
+      minus.setAttribute("aria-label", "ลดจำนวน " + p.name);
+      minus.setAttribute("data-fk", "minus:" + key);
+      minus.addEventListener("click", function () { bump(key, -u.step); });
+
+      var q = el("div", "qty num" + (qty > 0 ? "" : " zero"),
+                 qty > 0 ? baht(qty) : "0");
+      q.setAttribute("aria-live", "polite");
+
+      var plus = el("button", "step-btn plus", "+");
+      plus.type = "button";
+      plus.disabled = !p.on;
+      plus.setAttribute("aria-label", "เพิ่มจำนวน " + p.name);
+      plus.setAttribute("data-fk", "plus:" + key);
+      plus.addEventListener("click", function () { bump(key, u.step); });
+
+      st.appendChild(minus); st.appendChild(q); st.appendChild(plus);
+      buy.appendChild(st);
+      body.appendChild(buy);
+
+      if (qty > 0) {
+        var lt = el("div", "line-total");
+        lt.appendChild(el("span", null, baht(qty) + " " + u.label + " × " + baht(u.price) + " ฿"));
+        lt.appendChild(el("span", "num", baht(qty * u.price) + " บาท"));
+        body.appendChild(lt);
+      }
+
+      card.appendChild(body);
+      host.appendChild(card);
+    });
+  }
+
+  function bump(key, delta) {
+    var next = (cart[key] || 0) + delta;
+    if (next <= 0) delete cart[key];          /* กันจำนวนติดลบ */
+    else cart[key] = Math.round(next * 100) / 100;
+    keepFocus(function () { renderShop(); });
+    renderCart();
+  }
+
+  function renderCart() {
+    var total = 0, items = 0;
+    Object.keys(cart).forEach(function (k) {
+      var parts = k.split("|");
+      for (var i = 0; i < PRODUCTS.length; i++) {
+        if (PRODUCTS[i].id !== parts[0]) continue;
+        for (var j = 0; j < PRODUCTS[i].units.length; j++) {
+          if (PRODUCTS[i].units[j].id === parts[1]) {
+            total += PRODUCTS[i].units[j].price * cart[k];
+            items += 1;
+          }
+        }
+      }
+    });
+    $("#cart-total").textContent = baht(total) + " บาท";
+    $("#cart-count").textContent = items ? items + " รายการในตะกร้า" : "ยังไม่ได้เลือกสินค้า";
+    $("#checkout").disabled = items === 0;
+    $("#checkout").textContent = items ? "สั่งซื้อ" : "ดูตะกร้า";
+  }
+
+  $("#checkout").addEventListener("click", function () {
+    toast("ไปหน้ากรอกชื่อ–เบอร์–ที่อยู่ (ยังไม่ได้ทำในตัวอย่างนี้)");
+  });
+
+  /* ════════════════════════════════════════════════════════════════════
+     หน้าที่ 2 — หลังบ้าน แก้ราคาประจำวัน
+  ════════════════════════════════════════════════════════════════════ */
+  var draft = {};      /* productId|unitId -> ราคาใหม่ */
+  var draftOn = {};    /* productId -> เปิด/ปิดขาย */
+  var aQuery = "";
+  var openHist = {};
+
+  $("#aq").addEventListener("input", function (e) {
+    aQuery = e.target.value.trim();
+    renderPrices();
+  });
+
+  function priceOf(p, u) {
+    var k = p.id + "|" + u.id;
+    return draft[k] !== undefined ? draft[k] : u.price;
+  }
+  function onOf(p) {
+    return draftOn[p.id] !== undefined ? draftOn[p.id] : p.on;
+  }
+
+  function renderPrices() {
+    var host = $("#price-rows");
+    host.textContent = "";
+
+    var list = PRODUCTS.filter(function (p) { return !aQuery || p.name.indexOf(aQuery) !== -1; });
+
+    if (!list.length) {
+      host.appendChild(el("div", "empty", "ไม่เจอสินค้าชื่อนี้"));
+      updateSaveBar();
+      return;
+    }
+
+    list.forEach(function (p) {
+      var on  = onOf(p);
+      var row = el("div", "prow" + (on ? "" : " off"));
+
+      var head = el("div", "prow-head");
+      var th = el("div", "prow-thumb"); th.appendChild(el("span", null, p.emoji));
+      head.appendChild(th);
+      head.appendChild(el("div", "prow-name", p.name));
+
+      var tg = el("div", "toggle");
+      tg.setAttribute("role", "group");
+      tg.setAttribute("aria-label", "สถานะการขายของ " + p.name);
+      var bOn = el("button", "on", "ขายอยู่");
+      bOn.type = "button"; bOn.setAttribute("aria-pressed", String(on));
+      bOn.setAttribute("data-fk", "on:" + p.id);
+      bOn.addEventListener("click", function () {
+        keepFocus(function () { draftOn[p.id] = true; renderPrices(); });
+      });
+      var bOff = el("button", "off", "ของหมด");
+      bOff.type = "button"; bOff.setAttribute("aria-pressed", String(!on));
+      bOff.setAttribute("data-fk", "off:" + p.id);
+      bOff.addEventListener("click", function () {
+        keepFocus(function () { draftOn[p.id] = false; renderPrices(); });
+      });
+      tg.appendChild(bOn); tg.appendChild(bOff);
+      head.appendChild(tg);
+      row.appendChild(head);
+
+      p.units.forEach(function (u) {
+        var k       = p.id + "|" + u.id;
+        var val     = priceOf(p, u);
+        var changed = val !== u.price;
+
+        var ur = el("div", "urow" + (changed ? " changed" : ""));
+
+        var meta = el("div", "u-meta");
+        meta.appendChild(el("div", "u-name", "ราคาต่อ" + u.label));
+        var was = el("div", "u-was");
+        if (changed) {
+          was.appendChild(document.createTextNode("เดิม " + baht(u.price) + " ฿ → "));
+          was.appendChild(el("strong", null, baht(val) + " ฿"));
+        } else {
+          was.textContent = "เมื่อวาน " + baht(u.was) + " ฿";
+        }
+        meta.appendChild(was);
+        ur.appendChild(meta);
+
+        var pe = el("div", "price-edit");
+        var dn = el("button", "pbtn", "−");
+        dn.type = "button";
+        dn.setAttribute("aria-label", "ลดราคา " + p.name + " ต่อ " + u.label);
+        dn.setAttribute("data-fk", "down:" + k);
+        dn.addEventListener("click", function () { setPrice(k, Math.max(0, val - 1)); });
+
+        var inp = el("input", "price-input num");
+        inp.type = "text"; inp.inputMode = "decimal"; inp.value = baht(val);
+        inp.setAttribute("aria-label", "ราคา " + p.name + " ต่อ " + u.label + " บาท");
+        inp.addEventListener("change", function () {
+          var n = parseFloat(inp.value.replace(/[^\d.]/g, ""));
+          if (isNaN(n) || n < 0) { n = u.price; toast("ใส่ได้เฉพาะตัวเลข ระบบคืนราคาเดิมให้แล้ว"); }
+          setPrice(k, Math.round(n * 100) / 100);
+        });
+
+        var up = el("button", "pbtn", "+");
+        up.type = "button";
+        up.setAttribute("aria-label", "เพิ่มราคา " + p.name + " ต่อ " + u.label);
+        up.setAttribute("data-fk", "up:" + k);
+        up.addEventListener("click", function () { setPrice(k, val + 1); });
+
+        pe.appendChild(dn); pe.appendChild(inp); pe.appendChild(up);
+        ur.appendChild(pe);
+        row.appendChild(ur);
+      });
+
+      if (HISTORY[p.id]) {
+        var hb = el("button", "hist-btn", (openHist[p.id] ? "▾ " : "▸ ") + "ราคาย้อนหลัง");
+        hb.type = "button";
+        hb.setAttribute("data-fk", "hist:" + p.id);
+        hb.addEventListener("click", function () {
+          openHist[p.id] = !openHist[p.id];
+          keepFocus(function () { renderPrices(); });
+        });
+        row.appendChild(hb);
+
+        if (openHist[p.id]) {
+          var box = el("div", "hist");
+          var ul  = el("ul");
+          HISTORY[p.id].forEach(function (h) {
+            var li = el("li");
+            li.appendChild(el("span", null, h[0] + " · " + h[1]));
+            li.appendChild(el("span", "num", h[2] + " ฿"));
+            ul.appendChild(li);
+          });
+          box.appendChild(ul);
+          row.appendChild(box);
+        }
+      }
+
+      host.appendChild(row);
+    });
+
+    updateSaveBar();
+  }
+
+  function setPrice(key, value) {
+    var parts = key.split("|");
+    for (var i = 0; i < PRODUCTS.length; i++) {
+      if (PRODUCTS[i].id !== parts[0]) continue;
+      for (var j = 0; j < PRODUCTS[i].units.length; j++) {
+        if (PRODUCTS[i].units[j].id !== parts[1]) continue;
+        if (value === PRODUCTS[i].units[j].price) delete draft[key];
+        else draft[key] = value;
+      }
+    }
+    keepFocus(function () { renderPrices(); });
+  }
+
+  function countChanges() {
+    var n = Object.keys(draft).length;
+    Object.keys(draftOn).forEach(function (pid) {
+      for (var i = 0; i < PRODUCTS.length; i++) {
+        if (PRODUCTS[i].id === pid && PRODUCTS[i].on !== draftOn[pid]) n += 1;
+      }
+    });
+    return n;
+  }
+
+  function updateSaveBar() {
+    var n = countChanges();
+    var c = $("#save-count");
+    c.textContent = "";
+    if (n === 0) {
+      c.textContent = "ยังไม่ได้แก้อะไร";
+    } else {
+      c.appendChild(document.createTextNode("แก้ไว้ "));
+      c.appendChild(el("b", null, String(n)));
+      c.appendChild(document.createTextNode(" รายการ ยังไม่ได้บันทึก"));
+    }
+    var s = $("#save");
+    s.disabled = n === 0;
+    s.textContent = n === 0 ? "บันทึกราคา" : "บันทึกราคา " + n + " รายการ";
+  }
+
+  $("#save").addEventListener("click", function () {
+    var n = countChanges();
+    Object.keys(draft).forEach(function (k) {
+      var parts = k.split("|");
+      PRODUCTS.forEach(function (p) {
+        if (p.id !== parts[0]) return;
+        p.units.forEach(function (u) {
+          if (u.id !== parts[1]) return;
+          u.was = u.price;
+          u.price = draft[k];
+        });
+      });
+    });
+    Object.keys(draftOn).forEach(function (pid) {
+      PRODUCTS.forEach(function (p) { if (p.id === pid) p.on = draftOn[pid]; });
+    });
+    draft = {}; draftOn = {};
+    renderPrices();
+    renderShop();
+    renderCart();
+    toast("บันทึกแล้ว " + n + " รายการ · ราคาใหม่ขึ้นหน้าเว็บลูกค้าเรียบร้อย");
+  });
+
+  renderShop();
+  renderCart();
+  renderPrices();
+})();
+</script>
+
+</body>
+</html>
