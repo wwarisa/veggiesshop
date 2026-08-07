@@ -340,6 +340,66 @@
   .save-count { font-size: 13px; color: var(--ink-3); }
   .save-count b { color: var(--price); }
 
+  /* ── ใบพิมพ์กระดาษคาร์บอน 80 มม. ─────────────────────────────────────
+     กระดาษเป็นสีขาวหมึกดำเสมอ ไม่เปลี่ยนตามธีมของหน้าจอ
+     เพราะสิ่งที่เห็นบนจอต้องตรงกับสิ่งที่ออกจากเครื่องพิมพ์ */
+  .paper-tools {
+    max-width: 560px; margin: 0 auto 16px;
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  }
+  .print-btn {
+    border: 0; background: var(--leaf); color: #fff; border-radius: 12px;
+    min-height: 46px; padding: 0 20px; font-size: 15px; font-weight: 700;
+  }
+  .paper-wrap { display: flex; justify-content: center; }
+  .ruler {
+    max-width: 560px; margin: 0 auto 10px; text-align: center;
+    font-size: 12.5px; color: var(--ink-3);
+  }
+
+  .slip {
+    width: 80mm; background: #FFFFFF; color: #000000;
+    padding: 4mm; border-radius: 3px; box-shadow: var(--shadow);
+    font-size: 11.5px; line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+  }
+  .slip + .slip { margin-top: 8mm; }
+  .s-shop  { text-align: center; font-weight: 800; font-size: 15px; }
+  .s-sub   { text-align: center; font-size: 10.5px; }
+  .s-rule  { border-top: 1px dashed #000; margin: 5px 0; }
+  .s-rule.solid { border-top: 1.5px solid #000; }
+  .s-title { text-align: center; font-weight: 800; font-size: 13px; letter-spacing: .05em; }
+  .s-no    { text-align: center; font-size: 20px; font-weight: 800; margin: 2px 0; }
+  .s-kv    { display: flex; gap: 5px; }
+  .s-kv b  { flex: none; width: 15mm; font-weight: 600; }
+  .s-kv span { flex: 1; min-width: 0; word-break: break-word; }
+  .s-item  { margin: 5px 0; }
+  .s-item-name { font-weight: 700; }
+  .s-row   { display: flex; justify-content: space-between; gap: 8px; }
+  .s-adj   { font-size: 10.5px; font-weight: 700; }
+  .s-strike { text-decoration: line-through; }
+  .s-total { display: flex; justify-content: space-between; align-items: baseline;
+             font-weight: 800; font-size: 16px; margin: 4px 0; }
+  .s-note  { font-size: 10px; line-height: 1.4; }
+  .s-copy  { text-align: center; font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+  .s-sign  { display: flex; gap: 4mm; margin-top: 9mm; }
+  .s-sign div { flex: 1; border-top: 1px dotted #000; padding-top: 3px;
+                font-size: 9.5px; text-align: center; }
+  .s-box   { border: 1px solid #000; padding: 3px 5px; margin: 4px 0; }
+  .s-check { display: flex; gap: 6px; align-items: flex-start; margin: 3px 0; font-size: 11px; }
+  .s-check i { flex: none; width: 4.5mm; height: 4.5mm; border: 1.2px solid #000;
+               display: block; margin-top: 1px; }
+
+  @media print {
+    @page { size: 80mm auto; margin: 0; }
+    body { background: #FFFFFF; }
+    .deck, .caption, .paper-tools, .ruler, .toast { display: none !important; }
+    .stage { padding: 0; }
+    .stage > section:not(#screen-print) { display: none !important; }
+    .slip { box-shadow: none; border-radius: 0; break-after: page; }
+    .slip:last-child { break-after: auto; }
+  }
+
   .toast {
     position: fixed; left: 50%; transform: translate(-50%, 20px);
     bottom: 26px; z-index: 90;
@@ -367,6 +427,7 @@
     <div class="segmented" role="group" aria-label="สลับหน้าที่ดู">
       <button type="button" id="tab-shop"   aria-pressed="true">หน้าลูกค้า</button>
       <button type="button" id="tab-prices" aria-pressed="false">หน้าแก้ราคา</button>
+      <button type="button" id="tab-print"  aria-pressed="false">ใบพิมพ์ 80 มม.</button>
     </div>
   </div>
 </div>
@@ -442,6 +503,20 @@
         </div>
       </div>
     </div>
+  </section>
+  <!-- ══════════ หน้าที่ 3 : ใบพิมพ์กระดาษคาร์บอน 80 มม. ══════════ -->
+  <section id="screen-print" hidden>
+    <p class="caption wide">เจ้าของร้านสั่งพิมพ์ก่อนออกรอบ · ขนาดจริง 80 มม. ตรงกับกระดาษคาร์บอนในเครื่องพิมพ์สลิป</p>
+
+    <div class="paper-tools" role="group" aria-label="เลือกแบบฟอร์มที่จะพิมพ์">
+      <button type="button" class="chip" id="f-order"  aria-pressed="true">ใบส่งของรายบ้าน</button>
+      <button type="button" class="chip" id="f-pick"   aria-pressed="false">ใบจัดของทั้งรอบ</button>
+      <button type="button" class="chip" id="f-close"  aria-pressed="false">ใบสรุปปิดรอบ</button>
+      <button type="button" class="print-btn" id="do-print">🖨 สั่งพิมพ์</button>
+    </div>
+    <p class="ruler" id="ruler">กระดาษ 80 มม. · พิมพ์ 2 ชุด ต้นฉบับให้ลูกค้า สำเนาเก็บที่ร้าน</p>
+
+    <div class="paper-wrap"><div id="papers"></div></div>
   </section>
 </div>
 
@@ -544,17 +619,22 @@
   }
 
   /* ════════ สลับหน้า ════════ */
-  var tabShop = $("#tab-shop"), tabPrices = $("#tab-prices");
+  var SCREENS = [
+    { tab: "#tab-shop",   screen: "#screen-shop",   key: "shop" },
+    { tab: "#tab-prices", screen: "#screen-prices", key: "prices" },
+    { tab: "#tab-print",  screen: "#screen-print",  key: "print" }
+  ];
   function show(which) {
-    var isShop = which === "shop";
-    $("#screen-shop").hidden = !isShop;
-    $("#screen-prices").hidden = isShop;
-    tabShop.setAttribute("aria-pressed", String(isShop));
-    tabPrices.setAttribute("aria-pressed", String(!isShop));
+    SCREENS.forEach(function (s) {
+      var active = s.key === which;
+      $(s.screen).hidden = !active;
+      $(s.tab).setAttribute("aria-pressed", String(active));
+    });
     window.scrollTo({ top: 0 });
   }
-  tabShop.addEventListener("click", function () { show("shop"); });
-  tabPrices.addEventListener("click", function () { show("prices"); });
+  SCREENS.forEach(function (s) {
+    $(s.tab).addEventListener("click", function () { show(s.key); });
+  });
 
   /* ════════════════════════════════════════════════════════════════════
      หน้าที่ 1 — ลูกค้าเลือกสินค้า
@@ -915,9 +995,220 @@
     toast("บันทึกแล้ว " + n + " รายการ · ราคาใหม่ขึ้นหน้าเว็บลูกค้าเรียบร้อย");
   });
 
+  /* ════════════════════════════════════════════════════════════════════
+     หน้าที่ 3 — ใบพิมพ์กระดาษคาร์บอน 80 มม.
+     ข้อมูลตัวอย่างของรอบส่งเย็นวันที่ 7 ส.ค. โซนหมู่บ้านสุขใจ
+  ════════════════════════════════════════════════════════════════════ */
+  var SHOP = { name: "[ชื่อร้าน]", phone: "081-234-5678" };
+
+  var ROUND = {
+    name: "รอบเย็น 7 ส.ค.",
+    time: "17:00 – 19:00 น.",
+    zone: "หมู่บ้านสุขใจ",
+    houses: 6,
+    total: 1845
+  };
+
+  var ORDER = {
+    no: "260807-014",
+    placedAt: "7 ส.ค. 2569  09:42 น.",
+    name: "คุณสมหญิง ใจดี",
+    phone: "081-234-5678",
+    address: "45/12 หมู่บ้านสุขใจ ซอย 3 (บ้านรั้วเขียว ตรงข้ามร้านกาแฟ)",
+    note: "ฝากไว้หน้าบ้านได้ ถ้าไม่มีคนอยู่โทรก่อน",
+    items: [
+      { name: "ผักบุ้งจีน",       qty: 2,   unit: "มัด",         price: 15  },
+      { name: "คะน้ายอด",         qty: 0.5, unit: "กก.",         price: 60,
+        realQty: 0.6, why: "ชั่งจริงได้ 6 ขีด" },
+      { name: "พริกขี้หนูสวน",     qty: 1,   unit: "ขีด",         price: 25  },
+      { name: "มะนาว",           qty: 1,   unit: "ถุง 10 ลูก",   price: 45  },
+      { name: "ไข่ไก่ เบอร์ 2",    qty: 1,   unit: "แผง 30 ฟอง",  price: 135 }
+    ]
+  };
+
+  var PICKLIST = [
+    { name: "ผักบุ้งจีน",       amount: "9 มัด" },
+    { name: "คะน้ายอด",         amount: "2.3 กก." },
+    { name: "ต้นหอม",           amount: "5 ขีด" },
+    { name: "ใบกะเพรา",         amount: "4 ถุง" },
+    { name: "พริกขี้หนูสวน",     amount: "4 ขีด" },
+    { name: "มะนาว",           amount: "3 ถุง" },
+    { name: "แตงกวา",          amount: "1.5 กก." },
+    { name: "ไข่ไก่ เบอร์ 2",    amount: "2 แผง" }
+  ];
+
+  var HOUSES = [
+    { no: "260807-011", name: "คุณมาลี",   addr: "12/3 ซอย 1",  amount: 320 },
+    { no: "260807-012", name: "คุณสมชาย",  addr: "8/7 ซอย 1",   amount: 185 },
+    { no: "260807-013", name: "ป้านวล",    addr: "22 ซอย 2",    amount: 410 },
+    { no: "260807-014", name: "คุณสมหญิง", addr: "45/12 ซอย 3", amount: 271 },
+    { no: "260807-015", name: "คุณวิชัย",  addr: "9 ซอย 3",     amount: 394 },
+    { no: "260807-016", name: "ร้านลุงชิด", addr: "1 ปากซอย",    amount: 265 }
+  ];
+
+  var CLOSE = {
+    delivered: 5, failed: 1,
+    failedNote: "260807-016 ร้านลุงชิด — ปิดร้าน ไม่มีคนรับ",
+    cash: 1240, transfer: 340, unpaid: 265
+  };
+
+  function orderTotals() {
+    var before = 0, after = 0;
+    ORDER.items.forEach(function (it) {
+      before += it.qty * it.price;
+      after  += (it.realQty !== undefined ? it.realQty : it.qty) * it.price;
+    });
+    return { before: before, after: after };
+  }
+
+  function slipHead(title) {
+    return '<div class="s-shop">' + SHOP.name + '</div>' +
+           '<div class="s-sub">โทร ' + SHOP.phone + '</div>' +
+           '<div class="s-rule solid"></div>' +
+           '<div class="s-title">' + title + '</div>';
+  }
+
+  /* ── แบบที่ 1: ใบส่งของรายบ้าน (พิมพ์ 2 ชุด ต้นฉบับ + สำเนา) ── */
+  function orderSlip(copyLabel) {
+    var t = orderTotals();
+    var items = ORDER.items.map(function (it) {
+      var q    = it.realQty !== undefined ? it.realQty : it.qty;
+      var line = q * it.price;
+      var html = '<div class="s-item"><div class="s-item-name">' + it.name + '</div>' +
+                 '<div class="s-row"><span>' + baht(q) + ' ' + it.unit +
+                 ' × ' + baht(it.price) + '</span><span>' + baht(line) + '</span></div>';
+      if (it.realQty !== undefined) {
+        html += '<div class="s-row s-adj"><span>สั่งไว้ <span class="s-strike">' +
+                baht(it.qty) + ' ' + it.unit + ' = ' + baht(it.qty * it.price) +
+                '</span></span><span>' + it.why + '</span></div>';
+      }
+      return html + '</div>';
+    }).join("");
+
+    var adjusted = t.after !== t.before;
+
+    return '<div class="slip">' +
+      slipHead("ใบส่งของ / ใบเก็บเงิน") +
+      '<div class="s-no">' + ORDER.no + '</div>' +
+      '<div class="s-sub">สั่งเมื่อ ' + ORDER.placedAt + '</div>' +
+      '<div class="s-rule"></div>' +
+      '<div class="s-kv"><b>รอบส่ง</b><span>' + ROUND.name + ' ' + ROUND.time + '</span></div>' +
+      '<div class="s-kv"><b>โซน</b><span>' + ROUND.zone + '</span></div>' +
+      '<div class="s-rule"></div>' +
+      '<div class="s-kv"><b>ลูกค้า</b><span>' + ORDER.name + '</span></div>' +
+      '<div class="s-kv"><b>โทร</b><span>' + ORDER.phone + '</span></div>' +
+      '<div class="s-kv"><b>ที่อยู่</b><span>' + ORDER.address + '</span></div>' +
+      (ORDER.note ? '<div class="s-kv"><b>หมายเหตุ</b><span>' + ORDER.note + '</span></div>' : '') +
+      '<div class="s-rule solid"></div>' +
+      items +
+      '<div class="s-rule solid"></div>' +
+      (adjusted
+        ? '<div class="s-row s-adj"><span>ยอดตอนสั่ง</span><span class="s-strike">' +
+          baht(t.before) + '</span></div>'
+        : '') +
+      '<div class="s-total"><span>ยอดที่ต้องเก็บ</span><span>' + baht(t.after) + ' บาท</span></div>' +
+      '<div class="s-box"><div class="s-check"><i></i><span>รับเงินสด</span></div>' +
+      '<div class="s-check"><i></i><span>โอนแล้ว (แนบสลิปให้ร้าน)</span></div>' +
+      '<div class="s-check"><i></i><span>ค้างไว้ก่อน เก็บรอบหน้า</span></div></div>' +
+      '<div class="s-note">ชำระเงินปลายทาง · ยอดอาจต่างจากตอนสั่งเล็กน้อยตามน้ำหนักที่ชั่งได้จริง ' +
+      'สินค้าที่ปรับแล้วมีบอกไว้ในรายการ</div>' +
+      '<div class="s-sign"><div>ผู้ส่งของ</div><div>ผู้รับของ</div></div>' +
+      '<div class="s-rule"></div>' +
+      '<div class="s-copy">' + copyLabel + '</div>' +
+      '</div>';
+  }
+
+  /* ── แบบที่ 2: ใบจัดของทั้งรอบ (ยอดผักรวมที่ต้องเตรียม + บ้านที่ต้องส่ง) ── */
+  function pickSlip() {
+    var pick = PICKLIST.map(function (p) {
+      return '<div class="s-check"><i></i><span class="s-row" style="flex:1"><span>' +
+             p.name + '</span><span><b>' + p.amount + '</b></span></span></div>';
+    }).join("");
+
+    var houses = HOUSES.map(function (h, i) {
+      return '<div class="s-item"><div class="s-row"><span class="s-item-name">' +
+             (i + 1) + '. ' + h.name + '</span><span><b>' + baht(h.amount) + '</b></span></div>' +
+             '<div class="s-row"><span>' + h.addr + '</span><span>' + h.no + '</span></div></div>';
+    }).join("");
+
+    return '<div class="slip">' +
+      slipHead("ใบจัดของทั้งรอบ") +
+      '<div class="s-sub">' + ROUND.name + ' · ' + ROUND.time + '</div>' +
+      '<div class="s-sub">โซน ' + ROUND.zone + ' · ' + ROUND.houses + ' บ้าน</div>' +
+      '<div class="s-rule solid"></div>' +
+      '<div class="s-title">ผักที่ต้องเตรียม</div>' +
+      '<div class="s-note">ชั่งแล้วติ๊กทีละอย่าง ยอดนี้รวมทุกบ้านในรอบแล้ว</div>' +
+      '<div class="s-rule"></div>' +
+      pick +
+      '<div class="s-rule solid"></div>' +
+      '<div class="s-title">บ้านที่ต้องส่ง</div>' +
+      '<div class="s-rule"></div>' +
+      houses +
+      '<div class="s-rule solid"></div>' +
+      '<div class="s-total"><span>ยอดต้องเก็บทั้งรอบ</span><span>' + baht(ROUND.total) + ' บาท</span></div>' +
+      '</div>';
+  }
+
+  /* ── แบบที่ 3: ใบสรุปปิดรอบ ── */
+  function closeSlip() {
+    var collected = CLOSE.cash + CLOSE.transfer;
+    return '<div class="slip">' +
+      slipHead("ใบสรุปปิดรอบ") +
+      '<div class="s-sub">' + ROUND.name + ' · โซน ' + ROUND.zone + '</div>' +
+      '<div class="s-rule solid"></div>' +
+      '<div class="s-row"><span>ส่งสำเร็จ</span><span><b>' + CLOSE.delivered + ' ราย</b></span></div>' +
+      '<div class="s-row"><span>ส่งไม่สำเร็จ</span><span><b>' + CLOSE.failed + ' ราย</b></span></div>' +
+      '<div class="s-note">' + CLOSE.failedNote + '</div>' +
+      '<div class="s-rule"></div>' +
+      '<div class="s-row"><span>เงินสด</span><span>' + baht(CLOSE.cash) + '</span></div>' +
+      '<div class="s-row"><span>เงินโอน</span><span>' + baht(CLOSE.transfer) + '</span></div>' +
+      '<div class="s-total"><span>เก็บเงินได้</span><span>' + baht(collected) + ' บาท</span></div>' +
+      '<div class="s-rule"></div>' +
+      '<div class="s-row"><span>ยอดที่ต้องเก็บทั้งรอบ</span><span>' + baht(ROUND.total) + '</span></div>' +
+      '<div class="s-total"><span>ยังค้างเก็บ</span><span>' + baht(CLOSE.unpaid) + ' บาท</span></div>' +
+      '<div class="s-note">ยอดค้างจะไปโผล่ในหน้า “ใครค้างเงิน” ให้เก็บรอบหน้าอัตโนมัติ</div>' +
+      '<div class="s-sign"><div>ผู้สรุปรอบ</div><div>วันที่</div></div>' +
+      '</div>';
+  }
+
+  var paperForm = "order";
+  var FORMS = {
+    order: { tab: "#f-order",
+             hint: "กระดาษ 80 มม. · พิมพ์ 2 ชุด ต้นฉบับให้ลูกค้า สำเนาเก็บที่ร้าน",
+             build: function () { return orderSlip("ต้นฉบับ — ให้ลูกค้า") +
+                                         orderSlip("สำเนา — เก็บที่ร้าน"); } },
+    pick:  { tab: "#f-pick",
+             hint: "กระดาษ 80 มม. · พิมพ์ใบเดียว ใช้ตอนชั่งผักก่อนออกรอบ",
+             build: pickSlip },
+    close: { tab: "#f-close",
+             hint: "กระดาษ 80 มม. · พิมพ์ตอนกลับถึงร้าน เก็บไว้กระทบยอดเงิน",
+             build: closeSlip }
+  };
+
+  function renderPapers() {
+    Object.keys(FORMS).forEach(function (k) {
+      $(FORMS[k].tab).setAttribute("aria-pressed", String(k === paperForm));
+    });
+    $("#ruler").textContent = FORMS[paperForm].hint;
+    $("#papers").innerHTML = FORMS[paperForm].build();
+  }
+
+  Object.keys(FORMS).forEach(function (k) {
+    $(FORMS[k].tab).addEventListener("click", function () {
+      paperForm = k;
+      renderPapers();
+    });
+  });
+
+  $("#do-print").addEventListener("click", function () {
+    toast("กำลังเปิดหน้าต่างพิมพ์ · ตั้งขนาดกระดาษเป็น 80 มม. ในเครื่องพิมพ์");
+    setTimeout(function () { window.print(); }, 250);
+  });
+
   renderShop();
   renderCart();
   renderPrices();
+  renderPapers();
 })();
 </script>
 
