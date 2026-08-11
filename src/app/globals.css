@@ -144,11 +144,34 @@ button {
 }
 
 /* ── ใบพิมพ์กระดาษคาร์บอน กระดาษเป็นสีขาวหมึกดำเสมอ ไม่ตามธีมจอ ── */
+.slip {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: var(--shadow);
+  border-radius: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
 @media print {
+  /* กระดาษสลิปกว้าง 80 มม. ยาวเท่าที่เนื้อหามี */
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
   body {
-    background: #fff;
+    background: #ffffff;
   }
   .no-print {
     display: none !important;
+  }
+  .slip {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .break-after-page {
+    break-after: page;
+  }
+  .slip:last-child {
+    break-after: auto;
   }
 }
