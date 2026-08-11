@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────────
+   โทนสีของร้าน — ตลาดสดตอนเช้า ใบผัก + ป้ายราคาสีส้มแดงแบบแผงผัก
+   ตัวแปรชุดนี้ตรงกับ mockup ที่อนุมัติแล้ว
+   ────────────────────────────────────────────────────────────────── */
+
+:root {
+  --ground: #e7ece3;
+  --surface: #ffffff;
+  --surface-2: #f4f6f1;
+  --line: #d8dfd3;
+  --line-strong: #bfc9b9;
+  --ink: #16211a;
+  --ink-2: #4c574c;
+  --ink-3: #77816f;
+  --leaf: #37702f;
+  --leaf-deep: #24501e;
+  --leaf-soft: #e6f0e1;
+  --head-bg: #24501e;
+  --price: #bf3e07;
+  --price-soft: #fbebe1;
+  --warn: #9a5b00;
+  --warn-soft: #fbf0dc;
+  --danger: #a82a21;
+  --muted: #8a907f;
+  --shadow: 0 1px 2px rgb(22 33 26 / 0.06), 0 8px 24px -14px rgb(22 33 26 / 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0e130d;
+    --surface: #191f17;
+    --surface-2: #212820;
+    --line: #2e372c;
+    --line-strong: #3e4a3b;
+    --ink: #e9eee5;
+    --ink-2: #b4beaf;
+    --ink-3: #8c9787;
+    --leaf: #86c075;
+    --leaf-deep: #a6d697;
+    --leaf-soft: #22301f;
+    --head-bg: #1b2c18;
+    --price: #ff9257;
+    --price-soft: #352117;
+    --warn: #e0a448;
+    --warn-soft: #2e2515;
+    --danger: #f2857c;
+    --muted: #7e8878;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -16px rgb(0 0 0 / 0.9);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0e130d;
+  --surface: #191f17;
+  --surface-2: #212820;
+  --line: #2e372c;
+  --line-strong: #3e4a3b;
+  --ink: #e9eee5;
+  --ink-2: #b4beaf;
+  --ink-3: #8c9787;
+  --leaf: #86c075;
+  --leaf-deep: #a6d697;
+  --leaf-soft: #22301f;
+  --head-bg: #1b2c18;
+  --price: #ff9257;
+  --price-soft: #352117;
+  --warn: #e0a448;
+  --warn-soft: #2e2515;
+  --danger: #f2857c;
+  --muted: #7e8878;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -16px rgb(0 0 0 / 0.9);
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-leaf: var(--leaf);
+  --color-leaf-deep: var(--leaf-deep);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-head: var(--head-bg);
+  --color-price: var(--price);
+  --color-price-soft: var(--price-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-muted: var(--muted);
+  --font-thai:
+    "Sarabun", "Noto Sans Thai", "IBM Plex Sans Thai", "Leelawadee UI", "Thonburi",
+    system-ui, -apple-system, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  /* ใช้ฟอนต์ไทยที่ติดมากับเครื่องอยู่แล้ว ไม่ต้องโหลดจากเน็ต หน้าเว็บจึงขึ้นไว */
+  font-family: var(--font-thai);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--leaf);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ตัวเลขเรียงตรงกันเป็นคอลัมน์ อ่านยอดเงินง่ายขึ้น */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── ใบพิมพ์กระดาษคาร์บอน กระดาษเป็นสีขาวหมึกดำเสมอ ไม่ตามธีมจอ ── */
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
