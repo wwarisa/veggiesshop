@@ -79,7 +79,10 @@ export function OrderLines({ order }: { order: Order }) {
                 </span>
                 {changed && (
                   <span className="font-bold text-price">
-                    เดิม {num(it.qty)} {it.unitLabel} = {num(it.lineTotal)}
+                    เดิม{" "}
+                    <span className="line-through">
+                      {num(it.qty)} {it.unitLabel} = {num(it.lineTotal)}
+                    </span>
                   </span>
                 )}
               </div>
@@ -108,7 +111,8 @@ export function OrderLines({ order }: { order: Order }) {
 
       {adjusted && (
         <p className="mt-2.5 text-[12.5px] text-ink-3">
-          ยอดเดิมตอนสั่ง {num(order.total)} บาท ปรับตามน้ำหนักที่ชั่งได้จริง
+          ยอดเดิมตอนสั่ง <span className="line-through">{num(order.total)} บาท</span>{" "}
+          ปรับตามน้ำหนักที่ชั่งได้จริง
         </p>
       )}
 

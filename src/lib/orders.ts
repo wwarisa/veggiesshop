@@ -135,7 +135,9 @@ export async function placeOrder(input: PlaceOrderInput): Promise<PlaceOrderResu
     zoneName: zoneDoc?.name ?? "",
     roundId: round?.id ?? null,
     roundLabel: round ? `${round.name} · ${round.timeWindow}` : "",
-    groupId: group?.id ?? null,
+    // เข้ามาทางหน้าเว็บหลักแต่เลือกรอบของกลุ่ม ก็ต้องนับยอดให้กลุ่มนั้นด้วย
+    // ไม่งั้นรายงานรายกลุ่มจะขึ้นว่าไม่มียอดขายทั้งที่มีออเดอร์จริง
+    groupId: group?.id ?? round?.groupId ?? null,
     source: group ? "link" : "web",
     items: priced.lines.map<OrderItem>((l) => ({
       ...l,
@@ -177,7 +179,7 @@ export async function placeOrder(input: PlaceOrderInput): Promise<PlaceOrderResu
   }
 
   await rememberCustomer(order);
-  await bumpDailyStats(order);
+  await rebuildDailyStats(order.createdAt.slice(0, 10));
 
   return { ok: true, order, reused: false };
 }
@@ -275,6 +277,7 @@ async function saveWithTotals(order: Order, by: string, message: string): Promis
   };
   await db().set(COL.orders, updated);
   await addEvent(order.id, by, "update", message);
+  await rebuildDailyStats(order.createdAt.slice(0, 10));
   return updated;
 }
 
@@ -399,6 +402,8 @@ export async function setDeliveryStatus(
     "status",
     `เปลี่ยนสถานะเป็น ${statusLabel(status)}${reason ? ` (${reason.trim()})` : ""}`,
   );
+  // ยกเลิกแล้วยอดต้องหายจากรายงาน ไม่งั้นยอดขายจะสูงเกินจริง
+  if (status === "cancelled") await rebuildDailyStats(order.createdAt.slice(0, 10));
   return { ok: true };
 }
 
@@ -454,47 +459,57 @@ export async function refreshCustomerOutstanding(phone: string): Promise<void> {
 
 /* ── สรุปยอดรายวัน เอาไว้ให้แดชบอร์ดอ่านทีเดียว ประหยัดโควต้าอ่าน ── */
 
-async function bumpDailyStats(order: Order): Promise<void> {
+export async function rebuildDailyStats(day: string): Promise<void> {
   const store = db();
-  const day = order.createdAt.slice(0, 10);
-  const current =
-    (await store.get<DailyStats>(COL.dailyStats, day)) ??
-    ({
-      id: day,
-      totalSales: 0,
-      orderCount: 0,
-      byGroup: {},
-      byProduct: {},
-      byGroupProduct: {},
-      updatedAt: "",
-    } satisfies DailyStats);
+  // ดึงเฉพาะออเดอร์ของวันนั้น ไม่ต้องอ่านทั้งตาราง
+  const orders = await store.list<Order>(COL.orders, {
+    where: [
+      ["createdAt", ">=", `${day}T00:00:00.000Z`],
+      ["createdAt", "<=", `${day}T23:59:59.999Z`],
+    ],
+  });
+  const live = orders.filter((o) => o.deliveryStatus !== "cancelled");
 
-  const groupKey = order.groupId ?? "web";
-  current.totalSales = money(current.totalSales + order.total);
-  current.orderCount += 1;
-  current.byGroup[groupKey] = money((current.byGroup[groupKey] ?? 0) + order.total);
+  const stats: DailyStats = {
+    id: day,
+    totalSales: 0,
+    orderCount: live.length,
+    byGroup: {},
+    byProduct: {},
+    byGroupProduct: {},
+    updatedAt: new Date().toISOString(),
+  };
 
-  for (const item of order.items) {
-    const prev = current.byProduct[item.productId] ?? {
-      amount: 0,
-      qty: 0,
-      unitLabel: item.unitLabel,
-    };
-    current.byProduct[item.productId] = {
-      amount: money(prev.amount + item.lineTotal),
-      qty: money(prev.qty + item.qty),
-      unitLabel: item.unitLabel,
-    };
-    const gpKey = `${groupKey}|${item.productId}`;
-    const prevGP = current.byGroupProduct[gpKey] ?? { amount: 0, qty: 0 };
-    current.byGroupProduct[gpKey] = {
-      amount: money(prevGP.amount + item.lineTotal),
-      qty: money(prevGP.qty + item.qty),
-    };
+  for (const order of live) {
+    // ใช้ยอดหลังปรับน้ำหนักจริงเสมอ ตัวเลขในรายงานจึงตรงกับยอดที่เก็บเงินจริง
+    const amount = order.adjustedTotal;
+    const groupKey = order.groupId ?? "web";
+    stats.totalSales = money(stats.totalSales + amount);
+    stats.byGroup[groupKey] = money((stats.byGroup[groupKey] ?? 0) + amount);
+
+    for (const item of order.items) {
+      const qty = item.realQty ?? item.qty;
+      const lineTotal = item.realLineTotal ?? item.lineTotal;
+      const prev = stats.byProduct[item.productId] ?? {
+        amount: 0,
+        qty: 0,
+        unitLabel: item.unitLabel,
+      };
+      stats.byProduct[item.productId] = {
+        amount: money(prev.amount + lineTotal),
+        qty: money(prev.qty + qty),
+        unitLabel: item.unitLabel,
+      };
+      const gpKey = `${groupKey}|${item.productId}`;
+      const prevGP = stats.byGroupProduct[gpKey] ?? { amount: 0, qty: 0 };
+      stats.byGroupProduct[gpKey] = {
+        amount: money(prevGP.amount + lineTotal),
+        qty: money(prevGP.qty + qty),
+      };
+    }
   }
 
-  current.updatedAt = new Date().toISOString();
-  await store.set(COL.dailyStats, current);
+  await store.set(COL.dailyStats, stats);
 }
 
 export async function getOrders(filter: {

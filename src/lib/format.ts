@@ -62,3 +62,18 @@ export function todayISO(now: Date = new Date()): string {
   const bangkok = new Date(now.getTime() + (7 * 60 + now.getTimezoneOffset()) * 60_000);
   return bangkok.toISOString().slice(0, 10);
 }
+
+/**
+ * อ่านตัวเลขจากช่องที่ผู้ใช้กรอก แบบไม่ตัดอะไรทิ้งเงียบๆ
+ *
+ * คืน null เมื่อเป็นค่าว่างหรือไม่ใช่ตัวเลข เพื่อให้ผู้เรียกแยกได้ว่า
+ * "ไม่ได้ใส่" กับ "ใส่มาผิด" ต่างกัน และเครื่องหมายลบไม่ถูกตัดทิ้ง
+ * ชั้นตรวจสอบข้างในจึงมีโอกาสปฏิเสธค่าติดลบได้จริง
+ */
+export function parseAmount(text: string): number | null {
+  const cleaned = text.trim().replace(/,/g, "");
+  if (cleaned === "") return null;
+  if (!/^-?\d*\.?\d+$/.test(cleaned)) return null;
+  const value = Number(cleaned);
+  return Number.isFinite(value) ? value : null;
+}

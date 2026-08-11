@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { COL, db } from "@/lib/db";
-import { money, todayISO } from "@/lib/format";
+import { money, parseAmount, todayISO } from "@/lib/format";
 import { readSession } from "@/lib/session";
 import {
   adjustItemQty,
@@ -81,8 +81,8 @@ export async function savePricesAction(
     const useBase = formData.get(`base:${key}`) === "1";
 
     if (scope === "base") {
-      const value = Number(text.replace(/[^\d.]/g, ""));
-      if (!Number.isFinite(value) || value < 0 || value === unit.price) continue;
+      const value = parseAmount(text);
+      if (value === null || value < 0 || value === unit.price) continue;
       const updated: Product = {
         ...product,
         units: product.units.map((u) =>
@@ -126,8 +126,8 @@ export async function savePricesAction(
         changed += 1;
         continue;
       }
-      const value = Number(text.replace(/[^\d.]/g, ""));
-      if (!Number.isFinite(value) || value < 0 || value === existing) continue;
+      const value = parseAmount(text);
+      if (value === null || value < 0 || value === existing) continue;
       groupPrices[key] = money(value);
       history.push({
         id: `${batchId}-${key}`,
@@ -183,8 +183,8 @@ function parseUnits(formData: FormData): ProductUnit[] {
     const label = String(formData.get(`unitLabel${i}`) ?? "").trim();
     const priceText = String(formData.get(`unitPrice${i}`) ?? "").trim();
     if (!label) continue;
-    const price = Number(priceText.replace(/[^\d.]/g, ""));
-    if (!Number.isFinite(price) || price < 0) continue;
+    const price = parseAmount(priceText);
+    if (price === null || price < 0) continue;
     const type = String(formData.get(`unitType${i}`) ?? "piece") as ProductUnit["unitType"];
     units.push({
       id: `u${units.length + 1}`,
@@ -476,7 +476,11 @@ export async function adjustQtyAction(
   const orderId = String(formData.get("orderId") ?? "");
   const index = Number(formData.get("index"));
   const raw = String(formData.get("realQty") ?? "").trim();
-  const realQty = raw === "" ? null : Number(raw.replace(/[^\d.]/g, ""));
+  // เว้นว่าง = ยกเลิกการปรับ ส่วนค่าที่พิมพ์มาผิดต้องเตือน ไม่ใช่แปลงเป็น 0 เงียบๆ
+  const realQty = raw === "" ? null : parseAmount(raw);
+  if (raw !== "" && realQty === null) {
+    return { error: "จำนวนจริงต้องเป็นตัวเลขเท่านั้น เช่น 1.2" };
+  }
 
   const result = await adjustItemQty(orderId, index, realQty, session.name);
   if (!result.ok) return { error: result.error };
@@ -493,7 +497,10 @@ export async function confirmCustomItemAction(
   const itemId = String(formData.get("itemId") ?? "");
   const unavailable = formData.get("unavailable") === "1";
   const raw = String(formData.get("price") ?? "").trim();
-  const price = unavailable ? null : Number(raw.replace(/[^\d.]/g, ""));
+  const price = unavailable ? null : parseAmount(raw);
+  if (!unavailable && price === null) {
+    return { error: "ใส่ราคาเป็นตัวเลขด้วยนะคะ หรือกดปุ่มไม่มีของถ้าไม่มีสินค้านี้" };
+  }
 
   const result = await confirmCustomItem(orderId, itemId, price, session.name);
   if (!result.ok) return { error: result.error };
@@ -523,7 +530,8 @@ export async function recordPaymentAction(
 ): Promise<ActionState> {
   const session = await requireOwner();
   const orderId = String(formData.get("orderId") ?? "");
-  const amount = Number(String(formData.get("amount") ?? "").replace(/[^\d.]/g, ""));
+  const amount = parseAmount(String(formData.get("amount") ?? ""));
+  if (amount === null) return { error: "ยอดเงินต้องเป็นตัวเลขเท่านั้น" };
   const method = (String(formData.get("method") ?? "cash") as PaymentMethod) || "cash";
   const slipData = String(formData.get("slipData") ?? "");
 
