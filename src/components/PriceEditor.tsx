@@ -65,7 +65,7 @@ export function PriceEditor({
   }
 
   return (
-    <form action={formAction}>
+    <form action={formAction} className="pb-2">
       <input type="hidden" name="scope" value={scope} />
 
       <p className="mb-3 rounded-[11px] bg-surface-2 px-3 py-2.5 text-[13.5px] leading-relaxed text-ink-2">
@@ -86,7 +86,7 @@ export function PriceEditor({
         />
       </label>
 
-      <div className="overflow-hidden rounded-[14px] border border-line bg-surface">
+      <div className="overflow-hidden rounded-[14px] border border-line bg-surface pb-1">
         {shown.length === 0 && (
           <p className="p-10 text-center text-ink-3">ไม่เจอสินค้าชื่อนี้</p>
         )}
@@ -245,7 +245,14 @@ export function PriceEditor({
         </p>
       )}
       {state.message && (
-        <p role="status" className="mt-3 rounded-[10px] bg-leaf-soft px-3 py-2.5 text-[14px] font-bold text-leaf-deep">
+        <p
+          role="status"
+          className={`mt-3 rounded-[10px] px-3 py-2.5 text-[14px] font-bold ${
+            state.message.startsWith("บันทึกแล้ว")
+              ? "bg-leaf-soft text-leaf-deep"
+              : "bg-surface-2 text-ink-2"
+          }`}
+        >
           {state.message}
         </p>
       )}

@@ -1,7 +1,12 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { saveGroupAction, type ActionState } from "@/app/admin/actions";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import {
+  deleteGroupAction,
+  saveGroupAction,
+  type ActionState,
+} from "@/app/admin/actions";
 import { btnPlain, btnPrimary, Field, inputClass, Pill } from "@/components/ui";
 import { thaiDate } from "@/lib/format";
 import type { Group, Product, Round, Zone } from "@/lib/types";
@@ -22,10 +27,13 @@ export function GroupManager({
     saveGroupAction,
     {},
   );
+  const router = useRouter();
   const [editing, setEditing] = useState<Group | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [addressMode, setAddressMode] = useState<"ask" | "fixed">("ask");
   const [copied, setCopied] = useState("");
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [removing, startRemoving] = useTransition();
 
   const lastMessage = useRef("");
   useEffect(() => {
@@ -196,7 +204,9 @@ export function GroupManager({
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-[17px] font-extrabold">{g.name}</h2>
               <Pill tone="muted">{g.productIds.length} สินค้า</Pill>
-              {g.addressMode === "fixed" && <Pill>ไม่ต้องกรอกที่อยู่</Pill>}
+              <Pill tone={g.addressMode === "fixed" ? "leaf" : "muted"}>
+                {g.addressMode === "fixed" ? "ไม่ต้องกรอกที่อยู่" : "ลูกค้ากรอกที่อยู่เอง"}
+              </Pill>
               {g.allowOther && <Pill tone="warn">เปิดช่องอื่นๆ</Pill>}
             </div>
 
@@ -244,9 +254,50 @@ export function GroupManager({
               </div>
             )}
 
-            <button type="button" onClick={() => open(g)} className={`${btnPlain} mt-3`}>
-              แก้ไขกลุ่มนี้
-            </button>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" onClick={() => open(g)} className={btnPlain}>
+                แก้ไขกลุ่มนี้
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmId(confirmId === g.id ? null : g.id)}
+                className="min-h-[46px] rounded-[11px] border border-danger px-4 text-[14px] font-bold text-danger"
+              >
+                ลบกลุ่ม
+              </button>
+            </div>
+
+            {confirmId === g.id && (
+              <div className="mt-2.5 rounded-[11px] border border-danger p-3">
+                <p className="text-[14px] leading-relaxed">
+                  <b>ลบกลุ่ม {g.name}?</b>
+                  <br />
+                  {links.length > 0
+                    ? `ลิงก์ ${links.length} อันของกลุ่มนี้จะเลิกผูกกลุ่ม และกลายเป็นขายทุกอย่างในราคากลางแทน · `
+                    : ""}
+                  ออเดอร์เก่ายังอยู่ครบ ไม่กระทบยอดย้อนหลัง
+                </p>
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => setConfirmId(null)} className={btnPlain}>
+                    ไม่ลบ
+                  </button>
+                  <button
+                    type="button"
+                    disabled={removing}
+                    onClick={() =>
+                      startRemoving(async () => {
+                        await deleteGroupAction(g.id);
+                        setConfirmId(null);
+                        router.refresh();
+                      })
+                    }
+                    className="min-h-[46px] rounded-[11px] bg-danger px-4 text-[15px] font-bold text-white disabled:opacity-60"
+                  >
+                    {removing ? "กำลังลบ…" : "ลบเลย"}
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         );
       })}

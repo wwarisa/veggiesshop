@@ -64,25 +64,43 @@ export async function savePricesAction(
   if (scope !== "base" && !group) return { error: "ไม่พบกลุ่มนี้" };
 
   let changed = 0;
+  let invalid = 0;
   const history: PriceHistory[] = [];
   const touchedProducts = new Map<string, Product>();
   const groupPrices = { ...(group?.prices ?? {}) };
 
+  // รวมคีย์จากทั้งช่องราคาและธง "กลับไปใช้ราคากลาง" เข้าด้วยกันก่อน
+  // ธงมาเดี่ยวๆ ได้เสมอ เพราะช่องที่ปิดไว้เบราว์เซอร์ไม่ส่งค่ามา
+  const keys = new Set<string>();
+  const priceText = new Map<string, string>();
   for (const [rawKey, rawValue] of formData.entries()) {
-    if (!rawKey.startsWith("price:")) continue;
-    const key = rawKey.slice("price:".length);
+    if (rawKey.startsWith("price:")) {
+      const key = rawKey.slice("price:".length);
+      keys.add(key);
+      priceText.set(key, String(rawValue));
+    } else if (rawKey.startsWith("base:")) {
+      keys.add(rawKey.slice("base:".length));
+    }
+  }
+
+  for (const key of keys) {
     const [productId, unitId] = key.split("|");
     const product = touchedProducts.get(productId) ?? byId.get(productId);
     if (!product) continue;
     const unit = product.units.find((u) => u.id === unitId);
     if (!unit) continue;
 
-    const text = String(rawValue).trim();
+    const text = (priceText.get(key) ?? "").trim();
     const useBase = formData.get(`base:${key}`) === "1";
 
     if (scope === "base") {
       const value = parseAmount(text);
-      if (value === null || value < 0 || value === unit.price) continue;
+      // ใส่ตัวอักษรหรือค่าติดลบ ต้องข้ามและนับไว้บอกเจ้าของ ไม่ใช่แปลงเป็น 0 เงียบๆ
+      if (value === null || value < 0) {
+        if (text !== "") invalid += 1;
+        continue;
+      }
+      if (value === unit.price) continue;
       const updated: Product = {
         ...product,
         units: product.units.map((u) =>
@@ -127,7 +145,11 @@ export async function savePricesAction(
         continue;
       }
       const value = parseAmount(text);
-      if (value === null || value < 0 || value === existing) continue;
+      if (value === null || value < 0) {
+        if (text !== "") invalid += 1;
+        continue;
+      }
+      if (value === existing) continue;
       groupPrices[key] = money(value);
       history.push({
         id: `${batchId}-${key}`,
@@ -152,6 +174,15 @@ export async function savePricesAction(
 
   revalidatePath("/admin/prices");
   revalidatePath("/");
+
+  if (invalid > 0) {
+    return {
+      error:
+        `มี ${invalid} ช่องที่ใส่ราคาไม่ถูกต้อง (ต้องเป็นตัวเลขและติดลบไม่ได้) ` +
+        `ช่องเหล่านั้นยังไม่ถูกบันทึก` +
+        (changed > 0 ? ` ส่วนอีก ${changed} รายการบันทึกเรียบร้อยแล้ว` : ""),
+    };
+  }
   return changed === 0
     ? { ok: true, message: "ไม่มีอะไรเปลี่ยน ราคายังเหมือนเดิม" }
     : { ok: true, message: `บันทึกแล้ว ${changed} รายการ ราคาใหม่ขึ้นหน้าเว็บลูกค้าเรียบร้อย` };
@@ -344,6 +375,23 @@ export async function saveGroupAction(
 
   revalidatePath("/admin/groups");
   return { ok: true, message: `บันทึกกลุ่ม ${name} แล้ว` };
+}
+
+/** ลบกลุ่ม — ซ่อนไม่ให้ใช้งานต่อ แต่ไม่ลบทิ้งจริงเพื่อไม่ให้ออเดอร์เก่าเสียการอ้างอิง */
+export async function deleteGroupAction(groupId: string): Promise<void> {
+  await requireOwner();
+  const store = db();
+  const rounds = await store.list<Round>(COL.rounds, {
+    where: [["groupId", "==", groupId]],
+  });
+  // รอบที่ยังผูกกับกลุ่มนี้อยู่ ให้เลิกผูกเสียก่อน ลิงก์จะได้ไม่ชี้ไปที่กลุ่มที่ถูกลบ
+  for (const r of rounds) {
+    await store.update(COL.rounds, r.id, { groupId: null });
+  }
+  await store.update(COL.groups, groupId, { isActive: false });
+  revalidatePath("/admin/groups");
+  revalidatePath("/admin/prices");
+  revalidatePath("/admin/rounds");
 }
 
 function slugify(text: string, fallback: string): string {
