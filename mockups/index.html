@@ -340,6 +340,158 @@
   .save-count { font-size: 13px; color: var(--ink-3); }
   .save-count b { color: var(--price); }
 
+  /* ── ประตูหน้าแรกของเจ้าของร้าน (ใส่รหัส) ─────────────────────────── */
+  .lock {
+    max-width: 360px; margin-inline: auto; text-align: center;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; box-shadow: var(--shadow); padding: 26px 20px 22px;
+  }
+  .lock-mark { font-size: 34px; line-height: 1; }
+  .lock-title { font-size: 20px; font-weight: 800; margin-top: 10px; }
+  .lock-sub { font-size: 13.5px; color: var(--ink-3); margin-top: 3px; }
+  .dots { display: flex; gap: 11px; justify-content: center; margin: 20px 0 8px; }
+  .dot {
+    width: 15px; height: 15px; border-radius: 50%;
+    border: 2px solid var(--line-strong); background: transparent;
+  }
+  .dot.on { background: var(--leaf); border-color: var(--leaf); }
+  .lock-msg { font-size: 13px; color: var(--ink-3); min-height: 20px; }
+  .lock-msg.bad { color: var(--danger); font-weight: 700; }
+  .keypad {
+    margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .key {
+    min-height: 58px; border-radius: 13px; border: 1px solid var(--line-strong);
+    background: var(--surface-2); font-size: 23px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .key:active { transform: scale(.95); }
+  .key.ghost { background: transparent; border-color: transparent; font-size: 15px; font-weight: 700; }
+  .shake { animation: shake .3s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-7px); }
+    75% { transform: translateX(7px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .shake { animation: none; } }
+
+  /* ── แถบเมนูหน้าจัดการ ──────────────────────────────────────────── */
+  .adminbar {
+    position: sticky; top: 48px; z-index: 40;
+    max-width: 760px; margin: 0 auto 14px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; box-shadow: var(--shadow); padding: 9px 11px;
+  }
+  .adminbar-in { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .who { flex: 1; font-size: 14.5px; font-weight: 700; }
+  #admin-nav { flex-wrap: wrap; overflow: visible; }
+
+  /* ── แดชบอร์ด ──────────────────────────────────────────────────── */
+  .tiles {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px; padding: 13px;
+  }
+  .tile {
+    border: 1px solid var(--line); border-radius: 13px; padding: 12px;
+    background: var(--surface); display: flex; flex-direction: column; gap: 3px;
+  }
+  .tile-label { font-size: 12.5px; color: var(--ink-3); font-weight: 600; }
+  .tile-value {
+    font-size: 26px; font-weight: 800; letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums; line-height: 1.15;
+  }
+  .tile-sub { font-size: 12.5px; color: var(--ink-3); }
+  .tile.alert { border-color: var(--warn); background: var(--warn-soft); }
+  .tile.alert .tile-label, .tile.alert .tile-value, .tile.alert .tile-sub { color: var(--warn); }
+
+  .panel { border-top: 1px solid var(--line); padding: 15px 13px; }
+  .panel-title { font-size: 16px; font-weight: 800; }
+  .panel-sub { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+
+  /* กราฟแท่งแนวนอน: ยาว = ขายได้มาก สีเดียวทั้งกราฟ ตัวเลขติดข้างแท่งทุกแท่ง */
+  .barlist { display: flex; flex-direction: column; gap: 11px; margin-top: 13px; }
+  .bar-row { display: flex; flex-direction: column; gap: 4px; }
+  .bar-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .bar-name { font-size: 14.5px; font-weight: 600; }
+  .bar-val  { font-size: 14.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .bar-qty  { font-size: 12px; color: var(--ink-3); font-weight: 600; }
+  .bar-track { height: 12px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--leaf); border-radius: 999px; }
+
+  /* กราฟแท่งแนวตั้ง 7 วัน */
+  .days { display: flex; gap: 6px; align-items: flex-end; height: 132px; margin-top: 15px; }
+  .day { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%;
+         justify-content: flex-end; position: relative; }
+  .day-bar { width: 100%; background: var(--leaf); border-radius: 5px 5px 0 0; min-height: 3px; }
+  .day.today .day-bar { background: var(--leaf-deep); }
+  :root[data-theme="dark"] .day.today .day-bar { background: #B7E3A8; }
+  .day-name { font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+  .day-tip {
+    position: absolute; bottom: 100%; margin-bottom: 5px;
+    background: var(--ink); color: var(--surface); border-radius: 7px;
+    padding: 3px 8px; font-size: 12px; font-weight: 700; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity .15s;
+    font-variant-numeric: tabular-nums;
+  }
+  .day:hover .day-tip, .day:focus-within .day-tip { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .day-tip { transition: none; } }
+
+  .todo { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .todo-item {
+    display: flex; gap: 10px; align-items: center;
+    border: 1px solid var(--line); border-radius: 11px; padding: 11px 12px;
+  }
+  .todo-item.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .todo-text { flex: 1; font-size: 14.5px; }
+  .todo-text b { display: block; font-size: 12.5px; color: var(--ink-3); font-weight: 600; }
+  .todo-item.warn .todo-text b { color: var(--warn); }
+
+  .table-toggle {
+    margin-top: 12px; border: 0; background: transparent; color: var(--leaf);
+    font-size: 13.5px; font-weight: 700; padding: 8px 0; min-height: 40px;
+  }
+  .dtable { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13.5px; }
+  .dtable th, .dtable td { text-align: start; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  .dtable th { color: var(--ink-3); font-size: 12px; font-weight: 700; }
+  .dtable td.num { text-align: end; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .table-wrap { overflow-x: auto; }
+
+  /* ── จัดการสินค้า ─────────────────────────────────────────────── */
+  .padmin { border-bottom: 1px solid var(--line); padding: 12px 13px; display: flex; gap: 11px; }
+  .padmin:last-child { border-bottom: 0; }
+  .padmin-body { flex: 1; min-width: 0; }
+  .padmin-name { font-size: 16.5px; font-weight: 700; }
+  .padmin-cat { font-size: 12.5px; color: var(--ink-3); }
+  .padmin-units { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .padmin-btns { margin-top: 9px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .danger-btn { border: 1px solid var(--danger); background: transparent; color: var(--danger);
+                border-radius: 10px; min-height: 44px; padding: 0 14px; font-size: 14px; font-weight: 700; }
+  .confirm {
+    margin-top: 10px; border: 1px solid var(--danger); border-radius: 11px;
+    padding: 12px; background: var(--surface);
+  }
+  .confirm-text { font-size: 14px; line-height: 1.5; }
+  .confirm-btns { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .danger-solid { border: 0; background: var(--danger); color: #fff; border-radius: 10px;
+                  min-height: 46px; padding: 0 18px; font-size: 15px; font-weight: 700; }
+
+  .form { padding: 14px 13px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+  .field label { font-size: 13.5px; font-weight: 700; }
+  .field input, .field select {
+    min-height: 50px; border-radius: 11px; border: 1.5px solid var(--line-strong);
+    background: var(--surface); padding: 0 12px; font-size: 16px; outline: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--leaf); }
+  .field .hint { font-size: 12.5px; color: var(--ink-3); }
+  .photo-drop {
+    border: 2px dashed var(--line-strong); border-radius: 12px; padding: 20px;
+    text-align: center; color: var(--ink-3); font-size: 14px; background: var(--surface);
+  }
+  .unit-edit { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 9px; }
+  .unit-edit .field { flex: 1; margin-bottom: 0; }
+  .form-btns { display: flex; gap: 9px; flex-wrap: wrap; }
+
   /* ── ลิงก์สั่งซื้อของกลุ่ม (ฝั่งลูกค้า) ────────────────────────────── */
   .linkbar {
     background: var(--leaf-soft); border-bottom: 1px solid var(--line);
@@ -489,9 +641,10 @@
   @media print {
     @page { size: 80mm auto; margin: 0; }
     body { background: #FFFFFF; }
-    .deck, .caption, .paper-tools, .ruler, .toast { display: none !important; }
+    .deck, .caption, .paper-tools, .ruler, .toast, .adminbar { display: none !important; }
     .stage { padding: 0; }
-    .stage > section:not(#screen-print) { display: none !important; }
+    #side-customer, #owner-lock, #screen-dash, #screen-products,
+    #screen-prices, #screen-groups { display: none !important; }
     .slip { box-shadow: none; border-radius: 0; break-after: page; }
     .slip:last-child { break-after: auto; }
   }
@@ -520,16 +673,17 @@
 <div class="deck">
   <div class="deck-in">
     <span class="deck-tag">Mockup · ยังไม่ใช่ระบบจริง</span>
-    <div class="segmented" role="group" aria-label="สลับหน้าที่ดู">
-      <button type="button" id="tab-shop"   aria-pressed="true">หน้าลูกค้า</button>
-      <button type="button" id="tab-prices" aria-pressed="false">หน้าแก้ราคา</button>
-      <button type="button" id="tab-groups" aria-pressed="false">กลุ่มและลิงก์</button>
-      <button type="button" id="tab-print"  aria-pressed="false">ใบพิมพ์ 80 มม.</button>
+    <div class="segmented" role="group" aria-label="สลับฝั่งที่ดู">
+      <button type="button" id="side-btn-customer" aria-pressed="true">ฝั่งลูกค้า</button>
+      <button type="button" id="side-btn-owner"    aria-pressed="false">ฝั่งเจ้าของร้าน 🔒</button>
     </div>
   </div>
 </div>
 
 <div class="stage">
+
+<!-- ══════════════════ ฝั่งลูกค้า ══════════════════ -->
+<div id="side-customer">
   <!-- ══════════ หน้าที่ 1 : ลูกค้าเลือกสินค้า ══════════ -->
   <section id="screen-shop">
     <p class="caption">ลูกค้าเปิดจากมือถือ · ลองสลับดูว่าเปิดจากหน้าเว็บหลัก กับเปิดจากลิงก์ของกลุ่ม ต่างกันยังไง</p>
@@ -567,7 +721,70 @@
     </div>
   </section>
 
-  <!-- ══════════ หน้าที่ 2 : หลังบ้าน แก้ราคาประจำวัน ══════════ -->
+</div><!-- /side-customer -->
+
+<!-- ══════════════════ ฝั่งเจ้าของร้าน ══════════════════ -->
+<div id="side-owner" hidden>
+
+  <!-- ── ประตูหน้าแรก: ใส่รหัสก่อนเข้า ── -->
+  <section id="owner-lock">
+    <p class="caption">หน้าจัดการของเจ้าของร้านแยกจากหน้าลูกค้าคนละส่วน ต้องใส่รหัสก่อนเข้า</p>
+    <div class="lock">
+      <div class="lock-mark" aria-hidden="true">🔒</div>
+      <div class="lock-title">ใส่รหัสของเจ้าของร้าน</div>
+      <div class="lock-sub">รหัส 6 หลัก · เปลี่ยนรหัสเองได้ในหน้าตั้งค่า</div>
+      <div class="dots" id="pin-dots" role="img" aria-label="ช่องใส่รหัส 6 หลัก"></div>
+      <div class="lock-msg" id="pin-msg">ตัวอย่างสำหรับทดลอง — กด 123456</div>
+      <div class="keypad" id="keypad"></div>
+    </div>
+  </section>
+
+  <!-- ── เข้ามาแล้ว ── -->
+  <div id="owner-app" hidden>
+    <div class="adminbar">
+      <div class="adminbar-in">
+        <div class="who"><span aria-hidden="true">🧺</span> เจ้าของร้าน</div>
+        <button type="button" class="mini-btn" id="logout">ออกจากระบบ</button>
+      </div>
+      <div class="chips" id="admin-nav" role="group" aria-label="เมนูหน้าจัดการ"></div>
+    </div>
+
+    <!-- ══════════ หน้าที่ 2 : แดชบอร์ดภาพรวมร้าน ══════════ -->
+    <section id="screen-dash">
+      <p class="caption wide">เปิดมาเห็นทันทีว่าวันนี้ขายได้เท่าไหร่ อะไรขายดี และต้องตามอะไรบ้าง</p>
+      <div class="wide">
+        <div class="admin">
+          <div class="admin-head">
+            <div class="admin-h1">ภาพรวมร้าน</div>
+            <div class="admin-date">ศุกร์ที่ 7 สิงหาคม</div>
+          </div>
+          <div id="dash-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ หน้าที่ 3 : จัดการสินค้า เพิ่ม-แก้-ลบ ══════════ -->
+    <section id="screen-products" hidden>
+      <p class="caption wide">เพิ่มผักใหม่ แก้ชื่อ หรือลบของที่เลิกขาย · ลองกดเพิ่มกับลบดูได้เลย</p>
+      <div class="wide">
+        <div class="admin">
+          <div class="admin-head">
+            <div class="admin-h1">สินค้าทั้งหมด</div>
+            <div class="admin-date" id="prod-count"></div>
+          </div>
+          <div class="admin-tools">
+            <button type="button" class="cta" id="add-product" style="width:100%">+ เพิ่มสินค้าใหม่</button>
+            <label class="search" style="margin-top:10px">
+              <span aria-hidden="true">🔍</span>
+              <input type="search" id="pq" placeholder="ค้นหาสินค้าที่จะแก้หรือลบ" aria-label="ค้นหาสินค้า">
+            </label>
+          </div>
+          <div id="products-body"></div>
+        </div>
+      </div>
+    </section>
+
+  <!-- ══════════ หน้าที่ 4 : หลังบ้าน แก้ราคาประจำวัน ══════════ -->
   <section id="screen-prices" hidden>
     <p class="caption wide">เจ้าของร้านเปิดตอนเช้า · แก้ตัวเลขทั้งหน้า แล้วกดบันทึกครั้งเดียวจบ</p>
     <div class="wide">
@@ -630,6 +847,8 @@
 
     <div class="paper-wrap"><div id="papers"></div></div>
   </section>
+  </div><!-- /owner-app -->
+</div><!-- /side-owner -->
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -778,24 +997,120 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 2600);
   }
 
-  /* ════════ สลับหน้า ════════ */
-  var SCREENS = [
-    { tab: "#tab-shop",   screen: "#screen-shop",   key: "shop" },
-    { tab: "#tab-prices", screen: "#screen-prices", key: "prices" },
-    { tab: "#tab-groups", screen: "#screen-groups", key: "groups" },
-    { tab: "#tab-print",  screen: "#screen-print",  key: "print" }
+  /* ════════ สลับฝั่ง: หน้าลูกค้า / หน้าจัดการของเจ้าของร้าน ════════ */
+  function showSide(side) {
+    $("#side-customer").hidden = side !== "customer";
+    $("#side-owner").hidden    = side !== "owner";
+    $("#side-btn-customer").setAttribute("aria-pressed", String(side === "customer"));
+    $("#side-btn-owner").setAttribute("aria-pressed", String(side === "owner"));
+    window.scrollTo({ top: 0 });
+  }
+  function show(which) { if (which === "shop") showSide("customer"); }
+
+  $("#side-btn-customer").addEventListener("click", function () { showSide("customer"); });
+  $("#side-btn-owner").addEventListener("click", function () { showSide("owner"); });
+
+  /* ════════ ประตูหน้าแรก: รหัส 6 หลัก ════════
+     ของจริงรหัสถูกเก็บแบบเข้ารหัสไว้ที่เซิร์ฟเวอร์ ตรวจฝั่งเซิร์ฟเวอร์
+     และล็อก 15 นาทีเมื่อกดผิดครบ 5 ครั้ง — ตัวอย่างนี้จำลองให้เห็นหน้าตา */
+  var DEMO_PIN = "123456";
+  var MAX_TRIES = 5;
+  var pinBuf = "", triesLeft = MAX_TRIES;
+
+  function renderDots() {
+    var host = $("#pin-dots");
+    host.textContent = "";
+    for (var i = 0; i < 6; i++) {
+      host.appendChild(el("span", "dot" + (i < pinBuf.length ? " on" : "")));
+    }
+  }
+
+  function pinPress(d) {
+    if (triesLeft <= 0) return;
+    if (pinBuf.length >= 6) return;
+    pinBuf += d;
+    renderDots();
+    if (pinBuf.length === 6) setTimeout(checkPin, 140);
+  }
+
+  function checkPin() {
+    var msg = $("#pin-msg");
+    if (pinBuf === DEMO_PIN) {
+      pinBuf = ""; triesLeft = MAX_TRIES;
+      renderDots();
+      msg.className = "lock-msg";
+      msg.textContent = "ตัวอย่างสำหรับทดลอง — กด 123456";
+      $("#owner-lock").hidden = true;
+      $("#owner-app").hidden = false;
+      showAdmin("dash");
+      return;
+    }
+    triesLeft -= 1;
+    pinBuf = "";
+    renderDots();
+    var lock = $(".lock");
+    lock.classList.remove("shake");
+    void lock.offsetWidth;
+    lock.classList.add("shake");
+    msg.className = "lock-msg bad";
+    msg.textContent = triesLeft > 0
+      ? "รหัสไม่ถูกต้อง ลองใหม่ได้อีก " + triesLeft + " ครั้ง"
+      : "กดผิดครบ 5 ครั้ง ระบบล็อกไว้ 15 นาที (ตัวอย่างนี้กดรีเฟรชหน้าเพื่อเริ่มใหม่)";
+  }
+
+  (function buildKeypad() {
+    var host = $("#keypad");
+    var keys = ["1","2","3","4","5","6","7","8","9","ลบ","0",""];
+    keys.forEach(function (k) {
+      if (k === "") { host.appendChild(el("div")); return; }
+      var b = el("button", "key" + (k === "ลบ" ? " ghost" : ""), k);
+      b.type = "button";
+      b.addEventListener("click", function () {
+        if (k === "ลบ") { pinBuf = pinBuf.slice(0, -1); renderDots(); return; }
+        pinPress(k);
+      });
+      host.appendChild(b);
+    });
+    renderDots();
+  })();
+
+  $("#logout").addEventListener("click", function () {
+    $("#owner-app").hidden = true;
+    $("#owner-lock").hidden = false;
+    pinBuf = ""; renderDots();
+    window.scrollTo({ top: 0 });
+    toast("ออกจากระบบแล้ว");
+  });
+
+  /* ════════ เมนูในหน้าจัดการ ════════ */
+  var ADMIN = [
+    { key: "dash",     label: "ภาพรวม",        screen: "#screen-dash" },
+    { key: "products", label: "สินค้า",        screen: "#screen-products" },
+    { key: "prices",   label: "แก้ราคา",       screen: "#screen-prices" },
+    { key: "groups",   label: "กลุ่มและลิงก์",  screen: "#screen-groups" },
+    { key: "print",    label: "ใบพิมพ์",       screen: "#screen-print" }
   ];
-  function show(which) {
-    SCREENS.forEach(function (s) {
-      var active = s.key === which;
-      $(s.screen).hidden = !active;
-      $(s.tab).setAttribute("aria-pressed", String(active));
+  var adminPage = "dash";
+
+  function showAdmin(key) {
+    adminPage = key;
+    ADMIN.forEach(function (a) { $(a.screen).hidden = a.key !== key; });
+    Array.prototype.forEach.call($("#admin-nav").children, function (b, i) {
+      b.setAttribute("aria-pressed", String(ADMIN[i].key === key));
     });
     window.scrollTo({ top: 0 });
   }
-  SCREENS.forEach(function (s) {
-    $(s.tab).addEventListener("click", function () { show(s.key); });
-  });
+
+  (function buildAdminNav() {
+    var host = $("#admin-nav");
+    ADMIN.forEach(function (a) {
+      var b = el("button", "chip", a.label);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(a.key === adminPage));
+      b.addEventListener("click", function () { showAdmin(a.key); });
+      host.appendChild(b);
+    });
+  })();
 
   /* ════════════════════════════════════════════════════════════════════
      หน้าที่ 1 — ลูกค้าเลือกสินค้า
@@ -1754,6 +2069,459 @@
     host.appendChild(add);
   }
 
+  /* ════════════════════════════════════════════════════════════════════
+     แดชบอร์ด — ตัวเลขที่เจ้าของร้านต้องเห็นทุกวัน
+     ของจริงคำนวณจาก daily_stats ที่สรุปไว้แล้ว หน้าจึงเปิดเร็วและประหยัดโควต้า
+  ════════════════════════════════════════════════════════════════════ */
+  var DASH = {
+    todaySales: 3240, todayOrders: 12, todayDelta: "มากกว่าเมื่อวาน 590 บาท",
+    monthSales: 21860, monthOrders: 78, avgOrder: 280,
+    unpaid: 1265, unpaidPeople: 4,
+    newOrders: 5, pendingPrice: 2, outOfStock: 2,
+    days: [
+      { name: "1 ส.ค.", v: 2380 }, { name: "2 ส.ค.", v: 2910 },
+      { name: "3 ส.ค.", v: 1840 }, { name: "4 ส.ค.", v: 3120 },
+      { name: "5 ส.ค.", v: 2650 }, { name: "6 ส.ค.", v: 3720 },
+      { name: "7 ส.ค.", v: 3240, today: true }
+    ],
+    best: {
+      all: [
+        { name: "ไข่ไก่ เบอร์ 2",   v: 4320, q: "32 แผง" },
+        { name: "ผักบุ้งจีน",       v: 3180, q: "212 มัด" },
+        { name: "คะน้ายอด",         v: 2740, q: "45.6 กก." },
+        { name: "พริกขี้หนูสวน",     v: 2150, q: "86 ขีด" },
+        { name: "มะนาว",           v: 1890, q: "42 ถุง" },
+        { name: "ต้นหอม",          v: 1420, q: "118 ขีด" }
+      ],
+      bni: [
+        { name: "ไข่ไก่ เบอร์ 2",   v: 2600, q: "20 แผง" },
+        { name: "ผักบุ้งจีน",       v: 1104, q: "92 มัด" },
+        { name: "พริกขี้หนูสวน",     v: 950,  q: "38 ขีด" },
+        { name: "คะน้ายอด",         v: 700,  q: "11.7 กก." },
+        { name: "มะนาว",           v: 405,  q: "9 ถุง" }
+      ],
+      moobaan: [
+        { name: "ผักบุ้งจีน",       v: 1455, q: "97 มัด" },
+        { name: "คะน้ายอด",         v: 1320, q: "22 กก." },
+        { name: "ไข่ไก่ เบอร์ 2",   v: 1080, q: "8 แผง" },
+        { name: "ต้นหอม",          v: 880,  q: "73 ขีด" },
+        { name: "มะนาว",           v: 765,  q: "17 ถุง" },
+        { name: "พริกขี้หนูสวน",     v: 620,  q: "25 ขีด" }
+      ]
+    },
+    channels: [
+      { name: "หน้าเว็บหลัก",        v: 8760 },
+      { name: "ลิงก์ หมู่บ้านสุขใจ",  v: 7340 },
+      { name: "ลิงก์ BNI Icon",     v: 5760 }
+    ]
+  };
+
+  var bestScope = "all";
+  var showBestTable = false;
+
+  /* กราฟแท่งแนวนอน — ยาวเท่าไหร่ = ขายได้เท่าไหร่ ใช้สีเขียวสีเดียวทั้งกราฟ
+     ตัวเลขติดไว้ข้างทุกแท่ง ไม่ต้องเดาจากความยาว */
+  function barList(rows) {
+    var max = rows.reduce(function (m, r) { return Math.max(m, r.v); }, 0) || 1;
+    var box = el("div", "barlist");
+    rows.forEach(function (r) {
+      var row  = el("div", "bar-row");
+      var head = el("div", "bar-head");
+      var left = el("div");
+      left.appendChild(el("div", "bar-name", r.name));
+      if (r.q) left.appendChild(el("div", "bar-qty", r.q));
+      head.appendChild(left);
+      head.appendChild(el("div", "bar-val", baht(r.v) + " ฿"));
+      row.appendChild(head);
+
+      var track = el("div", "bar-track");
+      var fill  = el("div", "bar-fill");
+      fill.style.width = Math.max(2, Math.round(r.v / max * 100)) + "%";
+      track.appendChild(fill);
+      row.appendChild(track);
+      box.appendChild(row);
+    });
+    return box;
+  }
+
+  function dataTable(rows, headName, headValue) {
+    var wrap = el("div", "table-wrap");
+    var t = el("table", "dtable");
+    var thead = el("thead"), htr = el("tr");
+    htr.appendChild(el("th", null, headName));
+    htr.appendChild(el("th", null, "จำนวนที่ขายได้"));
+    htr.appendChild(el("th", null, headValue));
+    thead.appendChild(htr); t.appendChild(thead);
+    var tb = el("tbody");
+    rows.forEach(function (r) {
+      var tr = el("tr");
+      tr.appendChild(el("td", null, r.name));
+      tr.appendChild(el("td", null, r.q || "—"));
+      tr.appendChild(el("td", "num", baht(r.v)));
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb);
+    wrap.appendChild(t);
+    return wrap;
+  }
+
+  function panel(title, sub) {
+    var p = el("div", "panel");
+    p.appendChild(el("div", "panel-title", title));
+    if (sub) p.appendChild(el("div", "panel-sub", sub));
+    return p;
+  }
+
+  function renderDash() {
+    var host = $("#dash-body");
+    host.textContent = "";
+
+    /* ── ตัวเลขสำคัญ ── */
+    var tiles = el("div", "tiles");
+    function tile(label, value, sub, alert) {
+      var t = el("div", "tile" + (alert ? " alert" : ""));
+      t.appendChild(el("div", "tile-label", label));
+      t.appendChild(el("div", "tile-value", value));
+      if (sub) t.appendChild(el("div", "tile-sub", sub));
+      tiles.appendChild(t);
+    }
+    tile("ขายได้วันนี้", baht(DASH.todaySales) + " ฿", DASH.todayOrders + " ออเดอร์ · " + DASH.todayDelta);
+    tile("ขายได้เดือนนี้", baht(DASH.monthSales) + " ฿",
+         DASH.monthOrders + " ออเดอร์ · เฉลี่ย " + baht(DASH.avgOrder) + " ฿/ออเดอร์");
+    tile("⚠️ ยังเก็บเงินไม่ได้", baht(DASH.unpaid) + " ฿", DASH.unpaidPeople + " ราย ตามด่วน", true);
+    tile("⚠️ รอจัดการ", DASH.newOrders + " ออเดอร์",
+         DASH.pendingPrice + " รายการรอยืนยันราคา", true);
+    host.appendChild(tiles);
+
+    /* ── ต้องทำวันนี้ ── */
+    var todoPanel = panel("ต้องทำวันนี้");
+    var todo = el("div", "todo");
+    function todoItem(icon, main, sub, warn) {
+      var it = el("div", "todo-item" + (warn ? " warn" : ""));
+      it.appendChild(el("span", null, icon));
+      var tx = el("div", "todo-text");
+      tx.appendChild(document.createTextNode(main));
+      tx.appendChild(el("b", null, sub));
+      it.appendChild(tx);
+      todo.appendChild(it);
+    }
+    todoItem("📦", DASH.newOrders + " ออเดอร์ใหม่ยังไม่ได้จัดของ", "รอบเย็นปิดรับ 15:00 น.", true);
+    todoItem("💬", DASH.pendingPrice + " รายการที่ลูกค้าพิมพ์ขอเอง รอใส่ราคา",
+             "ลูกค้ายังไม่รู้ยอดจนกว่าจะยืนยัน", true);
+    todoItem("💰", DASH.unpaidPeople + " รายค้างเงินรวม " + baht(DASH.unpaid) + " บาท",
+             "ค้างนานสุด 6 วัน");
+    todoItem("🚫", DASH.outOfStock + " รายการปิดขายอยู่", "ผักกาดหอม · มะเขือเปราะ");
+    todoPanel.appendChild(todo);
+    host.appendChild(todoPanel);
+
+    /* ── ยอดขาย 7 วัน ── */
+    var dayPanel = panel("ยอดขาย 7 วันล่าสุด", "แตะที่แท่งเพื่อดูตัวเลข");
+    var days = el("div", "days");
+    var dmax = DASH.days.reduce(function (m, d) { return Math.max(m, d.v); }, 0);
+    DASH.days.forEach(function (d) {
+      var col = el("div", "day" + (d.today ? " today" : ""));
+      col.tabIndex = 0;
+      col.setAttribute("role", "img");
+      col.setAttribute("aria-label", d.name + " ขายได้ " + baht(d.v) + " บาท");
+      col.appendChild(el("div", "day-tip", baht(d.v) + " ฿"));
+      var bar = el("div", "day-bar");
+      bar.style.height = Math.max(4, Math.round(d.v / dmax * 100)) + "%";
+      col.appendChild(bar);
+      col.appendChild(el("div", "day-name", d.today ? "วันนี้" : d.name.replace(" ส.ค.", "")));
+      days.appendChild(col);
+    });
+    dayPanel.appendChild(days);
+    host.appendChild(dayPanel);
+
+    /* ── สินค้าขายดี แยกดูรายกลุ่มได้ ── */
+    var bestPanel = panel("สินค้าขายดีเดือนนี้", "เรียงตามยอดขาย เลือกดูเฉพาะกลุ่มได้");
+    var filter = el("div", "chips");
+    var SCOPES2 = [{ id: "all", label: "ทั้งร้าน" }].concat(
+      GROUPS.map(function (g) { return { id: g.id, label: g.name }; })
+    );
+    SCOPES2.forEach(function (sc) {
+      var b = el("button", "chip", sc.label);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(sc.id === bestScope));
+      b.setAttribute("data-fk", "best:" + sc.id);
+      b.addEventListener("click", function () {
+        bestScope = sc.id;
+        keepFocus(function () { renderDash(); });
+      });
+      filter.appendChild(b);
+    });
+    filter.style.marginTop = "11px";
+    bestPanel.appendChild(filter);
+
+    var rows = DASH.best[bestScope] || [];
+    bestPanel.appendChild(showBestTable
+      ? dataTable(rows, "สินค้า", "ยอดขาย (บาท)")
+      : barList(rows));
+
+    var tgl = el("button", "table-toggle", showBestTable ? "▾ ดูเป็นกราฟ" : "▸ ดูเป็นตาราง");
+    tgl.type = "button";
+    tgl.setAttribute("data-fk", "besttable");
+    tgl.addEventListener("click", function () {
+      showBestTable = !showBestTable;
+      keepFocus(function () { renderDash(); });
+    });
+    bestPanel.appendChild(tgl);
+    host.appendChild(bestPanel);
+
+    /* ── ยอดขายแยกช่องทาง ── */
+    var chPanel = panel("ยอดขายแยกตามช่องทาง", "เดือนนี้ · ลิงก์ไหนทำเงินได้ดีที่สุด");
+    chPanel.appendChild(barList(DASH.channels));
+    host.appendChild(chPanel);
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     จัดการสินค้า — เพิ่ม แก้ ลบ
+  ════════════════════════════════════════════════════════════════════ */
+  var pQuery = "";
+  var confirmDel = null;
+  var showForm = false;
+  var editing = null;
+  var form = { name: "", cat: "leaf", u1: "กิโลกรัม", p1: "", u2: "", p2: "" };
+
+  $("#pq").addEventListener("input", function (e) {
+    pQuery = e.target.value.trim();
+    renderProducts();
+  });
+
+  $("#add-product").addEventListener("click", function () {
+    showForm = true; editing = null;
+    form = { name: "", cat: "leaf", u1: "กิโลกรัม", p1: "", u2: "", p2: "" };
+    renderProducts();
+  });
+
+  function catName(id) {
+    for (var i = 0; i < CATEGORIES.length; i++) {
+      if (CATEGORIES[i].id === id) return CATEGORIES[i].name;
+    }
+    return "";
+  }
+
+  function groupsUsing(pid) {
+    return GROUPS.filter(function (g) { return g.productIds.indexOf(pid) !== -1; });
+  }
+
+  function renderProducts() {
+    var host = $("#products-body");
+    host.textContent = "";
+    $("#prod-count").textContent = PRODUCTS.length + " รายการ · เพิ่มได้ไม่จำกัด";
+
+    if (showForm) host.appendChild(productForm());
+
+    var list = PRODUCTS.filter(function (p) { return !pQuery || p.name.indexOf(pQuery) !== -1; });
+    if (!list.length) {
+      host.appendChild(el("div", "empty", "ไม่เจอสินค้าชื่อนี้"));
+      return;
+    }
+
+    list.forEach(function (p) {
+      var row = el("div", "padmin");
+      var th = el("div", "prow-thumb"); th.appendChild(el("span", null, p.emoji));
+      row.appendChild(th);
+
+      var body = el("div", "padmin-body");
+      body.appendChild(el("div", "padmin-name", p.name));
+      body.appendChild(el("div", "padmin-cat",
+        catName(p.cat) + (p.on ? "" : " · ปิดขายอยู่")));
+
+      var units = el("div", "padmin-units");
+      p.units.forEach(function (u) {
+        units.appendChild(el("span", "item-tag", u.label + " " + baht(u.price) + " ฿"));
+      });
+      body.appendChild(units);
+
+      var used = groupsUsing(p.id);
+      if (used.length) {
+        body.appendChild(el("div", "padmin-cat",
+          "อยู่ในกลุ่ม: " + used.map(function (g) { return g.name; }).join(" · ")));
+      }
+
+      var btns = el("div", "padmin-btns");
+      var ed = el("button", "mini-btn", "แก้ไข");
+      ed.type = "button";
+      ed.addEventListener("click", function () {
+        showForm = true; editing = p.id; confirmDel = null;
+        form = {
+          name: p.name, cat: p.cat,
+          u1: p.units[0].label, p1: String(p.units[0].price),
+          u2: p.units[1] ? p.units[1].label : "",
+          p2: p.units[1] ? String(p.units[1].price) : ""
+        };
+        renderProducts();
+        window.scrollTo({ top: 0 });
+      });
+      var del = el("button", "danger-btn", "ลบ");
+      del.type = "button";
+      del.addEventListener("click", function () {
+        confirmDel = confirmDel === p.id ? null : p.id;
+        renderProducts();
+      });
+      btns.appendChild(ed); btns.appendChild(del);
+      body.appendChild(btns);
+
+      if (confirmDel === p.id) {
+        var cf = el("div", "confirm");
+        var txt = el("div", "confirm-text");
+        txt.appendChild(el("b", null, "ลบ " + p.name + " ออกจากร้าน?"));
+        txt.appendChild(document.createElement("br"));
+        txt.appendChild(document.createTextNode(
+          used.length
+            ? "จะหายจากลิงก์ของ " + used.map(function (g) { return g.name; }).join(" และ ") +
+              " ด้วย · ออเดอร์เก่ายังเก็บชื่อกับราคาไว้ครบ ไม่กระทบยอดย้อนหลัง"
+            : "ออเดอร์เก่ายังเก็บชื่อกับราคาไว้ครบ ไม่กระทบยอดย้อนหลัง"));
+        cf.appendChild(txt);
+
+        var cb = el("div", "confirm-btns");
+        var no = el("button", "mini-btn", "ไม่ลบ");
+        no.type = "button";
+        no.addEventListener("click", function () { confirmDel = null; renderProducts(); });
+        var yes = el("button", "danger-solid", "ลบเลย");
+        yes.type = "button";
+        yes.addEventListener("click", function () { deleteProduct(p.id); });
+        cb.appendChild(no); cb.appendChild(yes);
+        cf.appendChild(cb);
+        body.appendChild(cf);
+      }
+
+      row.appendChild(body);
+      host.appendChild(row);
+    });
+  }
+
+  function productForm() {
+    var box = el("div", "form");
+    box.appendChild(el("div", "panel-title", editing ? "แก้ไขสินค้า" : "เพิ่มสินค้าใหม่"));
+
+    function field(label, key, placeholder, hint) {
+      var f = el("div", "field");
+      var id = "f-" + key;
+      var lb = el("label", null, label); lb.htmlFor = id;
+      f.appendChild(lb);
+      var inp = el("input");
+      inp.id = id; inp.type = "text"; inp.value = form[key];
+      inp.placeholder = placeholder || "";
+      inp.addEventListener("input", function () { form[key] = inp.value; });
+      f.appendChild(inp);
+      if (hint) f.appendChild(el("div", "hint", hint));
+      return f;
+    }
+
+    box.appendChild(field("ชื่อสินค้า", "name", "เช่น ผักกวางตุ้ง"));
+
+    var cf = el("div", "field");
+    var cl = el("label", null, "หมวดหมู่"); cl.htmlFor = "f-cat";
+    cf.appendChild(cl);
+    var sel = el("select"); sel.id = "f-cat";
+    CATEGORIES.filter(function (c) { return c.id !== "all"; }).forEach(function (c) {
+      var o = el("option", null, c.name); o.value = c.id;
+      if (c.id === form.cat) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", function () { form.cat = sel.value; });
+    cf.appendChild(sel);
+    box.appendChild(cf);
+
+    var pf = el("div", "field");
+    pf.appendChild(el("label", null, "รูปสินค้า"));
+    var drop = el("div", "photo-drop", "📷 กดเพื่อถ่ายรูป หรือเลือกจากคลังภาพ");
+    drop.addEventListener("click", function () {
+      toast("ระบบจริงจะเปิดกล้อง แล้วย่อรูปให้อัตโนมัติก่อนอัปโหลด");
+    });
+    pf.appendChild(drop);
+    pf.appendChild(el("div", "hint", "ถ่ายจากมือถือได้เลย ระบบย่อให้อัตโนมัติ ลูกค้าเน็ตช้าก็เปิดไว"));
+    box.appendChild(pf);
+
+    box.appendChild(el("div", "panel-sub", "หน่วยขายและราคา — ใส่ได้ถึง 2 หน่วยต่อสินค้า 1 อย่าง"));
+
+    function unitRow(uKey, pKey, req) {
+      var r = el("div", "unit-edit");
+      r.appendChild(field(req ? "หน่วยขาย" : "หน่วยที่ 2 (ถ้ามี)", uKey, "เช่น มัด / กิโลกรัม"));
+      r.appendChild(field("ราคา (บาท)", pKey, "0"));
+      return r;
+    }
+    box.appendChild(unitRow("u1", "p1", true));
+    box.appendChild(unitRow("u2", "p2", false));
+
+    var btns = el("div", "form-btns");
+    var save = el("button", "cta", editing ? "บันทึกการแก้ไข" : "บันทึกสินค้าใหม่");
+    save.type = "button";
+    save.addEventListener("click", saveProduct);
+    var cancel = el("button", "mini-btn", "ยกเลิก");
+    cancel.type = "button";
+    cancel.addEventListener("click", function () {
+      showForm = false; editing = null; renderProducts();
+    });
+    btns.appendChild(save); btns.appendChild(cancel);
+    box.appendChild(btns);
+    return box;
+  }
+
+  function saveProduct() {
+    var name  = form.name.trim();
+    var price = parseFloat(form.p1);
+    if (!name)  { toast("ยังไม่ได้ใส่ชื่อสินค้า"); return; }
+    if (!form.u1.trim()) { toast("ยังไม่ได้ใส่หน่วยขาย เช่น มัด หรือ กิโลกรัม"); return; }
+    if (isNaN(price) || price < 0) { toast("ราคาต้องเป็นตัวเลข ใส่ 0 ได้ถ้ายังไม่รู้ราคา"); return; }
+
+    var units = [{ id: "u1", label: form.u1.trim(), price: price, was: price, step: 1 }];
+    var p2 = parseFloat(form.p2);
+    if (form.u2.trim() && !isNaN(p2) && p2 >= 0) {
+      units.push({ id: "u2", label: form.u2.trim(), price: p2, was: p2, step: 1 });
+    }
+
+    if (editing) {
+      PRODUCTS.forEach(function (p) {
+        if (p.id !== editing) return;
+        p.name = name; p.cat = form.cat; p.units = units;
+      });
+      toast("แก้ไข " + name + " เรียบร้อย ราคาใหม่ขึ้นทุกลิงก์แล้ว");
+    } else {
+      PRODUCTS.push({
+        id: "n" + (PRODUCTS.length + 1), cat: form.cat, name: name,
+        emoji: "🥬", note: "", on: true, units: units
+      });
+      toast("เพิ่ม " + name + " แล้ว · ขึ้นหน้าเว็บหลักทันที ถ้าจะให้ขึ้นในลิงก์กลุ่มด้วยให้ไปเพิ่มที่หน้ากลุ่ม");
+    }
+
+    showForm = false; editing = null;
+    form = { name: "", cat: "leaf", u1: "กิโลกรัม", p1: "", u2: "", p2: "" };
+    refreshAll();
+  }
+
+  function deleteProduct(pid) {
+    var name = "";
+    PRODUCTS.forEach(function (p) { if (p.id === pid) name = p.name; });
+    for (var i = PRODUCTS.length - 1; i >= 0; i--) {
+      if (PRODUCTS[i].id === pid) PRODUCTS.splice(i, 1);
+    }
+    GROUPS.forEach(function (g) {
+      var idx = g.productIds.indexOf(pid);
+      if (idx !== -1) g.productIds.splice(idx, 1);
+      Object.keys(g.prices).forEach(function (k) {
+        if (k.split("|")[0] === pid) delete g.prices[k];
+      });
+    });
+    Object.keys(cart).forEach(function (k) {
+      if (k.split("|")[0] === pid) delete cart[k];
+    });
+    confirmDel = null;
+    toast("ลบ " + name + " แล้ว");
+    refreshAll();
+  }
+
+  function refreshAll() {
+    renderProducts();
+    renderShop();
+    renderCart();
+    renderPrices();
+    renderGroups();
+    renderChips();
+  }
+
   renderShopHead();
   renderLinkBar();
   renderChips();
@@ -1762,6 +2530,8 @@
   renderPrices();
   renderGroups();
   renderPapers();
+  renderDash();
+  renderProducts();
 })();
 </script>
 
