@@ -110,6 +110,14 @@ export function ShopClient({
 
   const total = lines.reduce((sum, l) => sum + priceOf(l.productId, l.unitId) * l.qty, 0);
 
+  function removeLine(productId: string, unitId: string) {
+    setCart((prev) => {
+      const copy = { ...prev };
+      delete copy[`${productId}|${unitId}`];
+      return copy;
+    });
+  }
+
   function bump(productId: string, unitId: string, delta: number) {
     const key = `${productId}|${unitId}`;
     setCart((prev) => {
@@ -127,9 +135,9 @@ export function ShopClient({
     if (digits.length < 9) return;
     const found = await lookupCustomerAction(digits);
     if (!found) return;
-    if (!name.trim()) setName(found.name);
-    if (!address.trim() && found.address) setAddress(found.address);
-    setFoundHint(`ยินดีต้อนรับกลับค่ะ คุณ${found.name} · เคยสั่งมาแล้ว ${found.orderCount} ครั้ง`);
+    setName((prev) => (prev.trim() ? prev : found.name));
+    if (found.address) setAddress((prev) => (prev.trim() ? prev : found.address));
+    setFoundHint(`ยินดีต้อนรับกลับค่ะ ${found.name} · เคยสั่งมาแล้ว ${found.orderCount} ครั้ง`);
   }
 
   async function submit() {
@@ -151,6 +159,13 @@ export function ShopClient({
       if (!result.ok) {
         setError(result.error);
         setSending(false);
+        // เลื่อนไปให้เห็นข้อความเตือน ไม่งั้นลูกค้ากดแล้วเหมือนไม่มีอะไรเกิดขึ้น
+        requestAnimationFrame(() => {
+          document.getElementById("checkout-error")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        });
         return;
       }
       try {
@@ -319,7 +334,11 @@ export function ShopClient({
           </div>
 
           {error && (
-            <p role="alert" className="rounded-[10px] bg-price-soft px-3 py-2.5 text-[14px] font-bold text-price">
+            <p
+              id="checkout-error"
+              role="alert"
+              className="rounded-[10px] bg-price-soft px-3 py-2.5 text-[14px] font-bold text-price"
+            >
               {error}
             </p>
           )}
@@ -413,7 +432,7 @@ export function ShopClient({
                 type="button"
                 onClick={() => setCat(c.id)}
                 aria-pressed={cat === c.id}
-                className={`min-h-[42px] flex-none whitespace-nowrap rounded-full border px-4 text-[14.5px] font-semibold ${
+                className={`min-h-[44px] flex-none whitespace-nowrap rounded-full border px-4 text-[14.5px] font-semibold ${
                   cat === c.id
                     ? "border-leaf bg-leaf text-white"
                     : "border-line-strong bg-surface text-ink-2"
@@ -438,12 +457,16 @@ export function ShopClient({
           const qty = cart[key] ?? 0;
           const price = priceOf(p.id, u.id);
           const buyable = p.isAvailable && !closedReason;
+          // ทุกหน่วยของสินค้านี้ที่มีของอยู่ในตะกร้า ไม่ใช่เฉพาะหน่วยที่กำลังเลือก
+          const inCartUnits = p.units.filter((uu) => (cart[`${p.id}|${uu.id}`] ?? 0) > 0);
 
           return (
             <article
               key={p.id}
               className={`flex gap-3 rounded-[14px] border bg-surface p-3 ${
-                qty > 0 ? "border-leaf shadow-[inset_0_0_0_1px_var(--leaf)]" : "border-line"
+                inCartUnits.length > 0
+                  ? "border-leaf shadow-[inset_0_0_0_1px_var(--leaf)]"
+                  : "border-line"
               } ${p.isAvailable ? "" : "opacity-60"}`}
             >
               <div
@@ -522,13 +545,32 @@ export function ShopClient({
                   </button>
                 </div>
 
-                {qty > 0 && (
-                  <p className="flex justify-between rounded-[9px] bg-leaf-soft px-2.5 py-1.5 text-sm font-semibold text-leaf-deep">
-                    <span>
-                      {num(qty)} {u.label} × {num(price)} ฿
-                    </span>
-                    <span className="num">{num(qty * price)} บาท</span>
-                  </p>
+                {inCartUnits.length > 0 && (
+                  <ul className="flex flex-col gap-1">
+                    {inCartUnits.map((cu) => {
+                      const cuPrice = priceOf(p.id, cu.id);
+                      const cuQty = cart[`${p.id}|${cu.id}`] ?? 0;
+                      return (
+                        <li
+                          key={cu.id}
+                          className="flex items-center gap-2 rounded-[9px] bg-leaf-soft px-2.5 py-1.5 text-sm font-semibold text-leaf-deep"
+                        >
+                          <span className="min-w-0 flex-1">
+                            {num(cuQty)} {cu.label} × {num(cuPrice)} ฿
+                          </span>
+                          <span className="num flex-none">{num(cuQty * cuPrice)} บาท</span>
+                          <button
+                            type="button"
+                            onClick={() => removeLine(p.id, cu.id)}
+                            aria-label={`เอา ${p.name} ${cu.label} ออกจากตะกร้า`}
+                            className="min-h-[36px] flex-none px-1 text-[13px] font-bold text-danger"
+                          >
+                            เอาออก
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 )}
               </div>
             </article>

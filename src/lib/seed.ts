@@ -209,7 +209,7 @@ const SHOP: ShopSettings = {
   shopName: "[ชื่อร้าน]",
   logoData: "",
   phone: "081-234-5678",
-  announcement: "ผักสดเก็บเช้าทุกวัน ปิดรับออเดอร์ 15:00 น. ส่งรอบเย็นวันเดียวกัน",
+  announcement: "ผักสดเก็บเช้าทุกวัน เลือกรอบส่งที่สะดวกได้ตอนสั่ง เก็บเงินปลายทาง",
   cutoffTime: "15:00",
   deliveryFee: 0,
   soldOutBehavior: "gray",
