@@ -1,0 +1,28 @@
+# ตั้งค่าสำหรับนำเว็บขึ้น Netlify
+# ไฟล์นี้ทำให้ deploy ครั้งแรกผ่านเลย ไม่ต้องตั้งค่าอะไรเพิ่มในหน้าเว็บ Netlify
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# ปลั๊กอินทางการของ Netlify สำหรับ Next.js
+# รองรับ Server Components, Server Actions และ middleware ครบ
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# กันไม่ให้เว็บถูกเอาไปฝังในหน้าอื่นเพื่อหลอกลูกค้า
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# หน้าจัดการห้ามให้เครื่องมือค้นหาเก็บไปทำดัชนี
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
