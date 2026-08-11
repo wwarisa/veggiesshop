@@ -340,6 +340,102 @@
   .save-count { font-size: 13px; color: var(--ink-3); }
   .save-count b { color: var(--price); }
 
+  /* ── ลิงก์สั่งซื้อของกลุ่ม (ฝั่งลูกค้า) ────────────────────────────── */
+  .linkbar {
+    background: var(--leaf-soft); border-bottom: 1px solid var(--line);
+    padding: 11px 13px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .linkbar-top { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .linkbar-name { font-size: 16px; font-weight: 800; color: var(--leaf-deep); }
+  .pill {
+    font-size: 11.5px; font-weight: 700; border-radius: 999px;
+    padding: 3px 9px; background: var(--leaf); color: #fff; flex: none;
+  }
+  .pill.warn { background: var(--warn); }
+  .pill.soft { background: var(--surface); color: var(--ink-2); border: 1px solid var(--line-strong); }
+  .linkbar-line { font-size: 13.5px; color: var(--ink-2); display: flex; gap: 7px; }
+  .linkbar-line b { flex: none; }
+
+  /* การ์ด "อื่นๆ" ให้ลูกค้าพิมพ์ของที่ไม่มีในรายการ */
+  .other-card {
+    border: 2px dashed var(--line-strong); border-radius: var(--radius);
+    background: var(--surface-2); padding: 13px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .other-title { font-size: 16px; font-weight: 700; }
+  .other-hint { font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+  .other-input {
+    width: 100%; min-height: 76px; padding: 10px 12px; border-radius: 11px;
+    border: 1.5px solid var(--line-strong); background: var(--surface);
+    font-size: 15px; line-height: 1.5; resize: vertical; outline: none;
+  }
+  .other-input:focus { border-color: var(--leaf); }
+  .other-add {
+    border: 0; background: var(--leaf); color: #fff; border-radius: 11px;
+    min-height: 48px; font-size: 15px; font-weight: 700;
+  }
+  .other-add:disabled { background: var(--line-strong); color: var(--ink-3); cursor: not-allowed; }
+  .other-list { display: flex; flex-direction: column; gap: 7px; }
+  .other-item {
+    background: var(--warn-soft); border-radius: 10px; padding: 9px 11px;
+    display: flex; gap: 9px; align-items: flex-start;
+  }
+  .other-item-text { flex: 1; min-width: 0; font-size: 14px; }
+  .other-item-tag { font-size: 12px; font-weight: 700; color: var(--warn); }
+  .other-del {
+    flex: none; border: 0; background: transparent; color: var(--danger);
+    font-size: 13px; font-weight: 700; min-height: 40px; padding: 0 4px;
+  }
+  .pending-note { font-size: 12px; color: var(--warn); font-weight: 600; }
+
+  /* ── หน้าแก้ราคา: ตัวเลือกกลุ่ม ─────────────────────────────────── */
+  .scope-note {
+    margin: 0; padding: 9px 13px; font-size: 13px; line-height: 1.45;
+    background: var(--surface-2); border-bottom: 1px solid var(--line); color: var(--ink-2);
+  }
+  .u-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; border-radius: 6px;
+    padding: 1px 7px; margin-inline-start: 6px;
+    background: var(--price-soft); color: var(--price);
+  }
+  .u-badge.base { background: var(--surface-2); color: var(--ink-3); }
+  .u-link {
+    border: 0; background: transparent; color: var(--leaf); font-weight: 700;
+    font-size: 12.5px; padding: 6px 0; min-height: 36px; text-align: start;
+  }
+
+  /* ── หน้ากลุ่มและลิงก์ (หลังบ้าน) ────────────────────────────────── */
+  .grow { border-bottom: 1px solid var(--line); padding: 14px 13px; }
+  .grow:last-child { border-bottom: 0; }
+  .grow-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .grow-name { font-size: 17px; font-weight: 800; }
+  .grow-facts { display: flex; flex-direction: column; gap: 5px; margin-top: 9px; }
+  .fact { display: flex; gap: 8px; font-size: 13.5px; color: var(--ink-2); }
+  .fact b { flex: none; width: 26mm; font-weight: 600; color: var(--ink-3); }
+  .fact span { flex: 1; min-width: 0; }
+
+  .linkbox {
+    margin-top: 11px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 11px; padding: 11px;
+  }
+  .linkbox-url {
+    font-size: 14px; font-weight: 700; word-break: break-all;
+    color: var(--leaf-deep); margin-bottom: 9px;
+  }
+  .linkbox-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mini-btn {
+    border: 1px solid var(--line-strong); background: var(--surface);
+    border-radius: 10px; min-height: 44px; padding: 0 14px;
+    font-size: 14px; font-weight: 700;
+  }
+  .mini-btn.primary { background: var(--leaf); border-color: var(--leaf); color: #fff; }
+  .grow-items { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .item-tag {
+    font-size: 12.5px; border: 1px solid var(--line); border-radius: 8px;
+    padding: 4px 9px; background: var(--surface-2);
+  }
+  .item-tag b { color: var(--price); }
+
   /* ── ใบพิมพ์กระดาษคาร์บอน 80 มม. ─────────────────────────────────────
      กระดาษเป็นสีขาวหมึกดำเสมอ ไม่เปลี่ยนตามธีมของหน้าจอ
      เพราะสิ่งที่เห็นบนจอต้องตรงกับสิ่งที่ออกจากเครื่องพิมพ์ */
@@ -427,6 +523,7 @@
     <div class="segmented" role="group" aria-label="สลับหน้าที่ดู">
       <button type="button" id="tab-shop"   aria-pressed="true">หน้าลูกค้า</button>
       <button type="button" id="tab-prices" aria-pressed="false">หน้าแก้ราคา</button>
+      <button type="button" id="tab-groups" aria-pressed="false">กลุ่มและลิงก์</button>
       <button type="button" id="tab-print"  aria-pressed="false">ใบพิมพ์ 80 มม.</button>
     </div>
   </div>
@@ -435,7 +532,9 @@
 <div class="stage">
   <!-- ══════════ หน้าที่ 1 : ลูกค้าเลือกสินค้า ══════════ -->
   <section id="screen-shop">
-    <p class="caption">ลูกค้าเปิดจากมือถือ · กดบวก-ลบแล้วยอดรวมด้านล่างขยับทันที</p>
+    <p class="caption">ลูกค้าเปิดจากมือถือ · ลองสลับดูว่าเปิดจากหน้าเว็บหลัก กับเปิดจากลิงก์ของกลุ่ม ต่างกันยังไง</p>
+    <div class="paper-tools" id="view-modes" role="group" aria-label="ลูกค้าเข้ามาทางไหน"></div>
+    <p class="ruler" id="view-hint"></p>
     <div class="phone">
       <header class="shop-head">
         <div class="shop-title">
@@ -445,10 +544,7 @@
             <div class="shop-sub">ผักสดส่งถึงบ้าน · เก็บเงินปลายทาง</div>
           </div>
         </div>
-        <div class="head-note">
-          <span aria-hidden="true">📣</span>
-          <span>วันนี้ผักบุ้งเพิ่งเก็บเช้านี้ ปิดรับออเดอร์ <b>15:00 น.</b> ส่งรอบเย็นวันเดียวกัน</span>
-        </div>
+        <div class="head-note" id="head-note"></div>
       </header>
 
       <div class="sticky-tools">
@@ -490,7 +586,9 @@
             <span aria-hidden="true">🔍</span>
             <input type="search" id="aq" placeholder="พิมพ์ชื่อผักเพื่อหาให้ไว" aria-label="ค้นหาสินค้าในหน้าแก้ราคา">
           </label>
+          <div class="chips" id="price-groups" role="group" aria-label="แก้ราคาของกลุ่มไหน"></div>
         </div>
+        <p class="scope-note" id="scope-note"></p>
 
         <div id="price-rows"></div>
 
@@ -504,7 +602,21 @@
       </div>
     </div>
   </section>
-  <!-- ══════════ หน้าที่ 3 : ใบพิมพ์กระดาษคาร์บอน 80 มม. ══════════ -->
+  <!-- ══════════ หน้าที่ 3 : หลังบ้าน กลุ่มและลิงก์สั่งซื้อ ══════════ -->
+  <section id="screen-groups" hidden>
+    <p class="caption wide">เจ้าของร้านสร้างรอบส่ง แล้วได้ลิงก์ไปแปะในกลุ่มไลน์ · คนกดลิงก์สั่งได้เลยไม่ต้องเลือกวัน</p>
+    <div class="wide">
+      <div class="admin">
+        <div class="admin-head">
+          <div class="admin-h1">กลุ่มและลิงก์สั่งซื้อ</div>
+          <div class="admin-date">สร้างรอบ 1 ครั้ง = ได้ลิงก์ 1 อัน ส่งเข้ากลุ่มไลน์ได้เลย</div>
+        </div>
+        <div id="groups-body"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ หน้าที่ 4 : ใบพิมพ์กระดาษคาร์บอน 80 มม. ══════════ -->
   <section id="screen-print" hidden>
     <p class="caption wide">เจ้าของร้านสั่งพิมพ์ก่อนออกรอบ · ขนาดจริง 80 มม. ตรงกับกระดาษคาร์บอนในเครื่องพิมพ์สลิป</p>
 
@@ -589,6 +701,54 @@
     p12: [["6 ส.ค.","ลูก","3 → 4"],["2 ส.ค.","ถุง 10 ลูก","32 → 38"]]
   };
 
+  /* ─────────────────────────────────────────────────────────────────────
+     กลุ่ม — กำหนดว่าลิงก์แต่ละอันขายอะไร ราคาเท่าไหร่ ต้องกรอกที่อยู่ไหม
+     ราคาที่ไม่ได้ตั้งไว้ในกลุ่ม จะใช้ราคากลางที่แก้ในหน้าแก้ราคาประจำวัน
+  ───────────────────────────────────────────────────────────────────── */
+  var GROUPS = [
+    {
+      id: "bni",
+      name: "BNI Icon",
+      productIds: ["p01", "p02", "p10", "p12", "p20"],
+      addressMode: "fixed",
+      fixedAddress: "อาคาร BNI Icon ชั้น 3 · รับของหน้าห้องประชุม",
+      allowOther: true,
+      /* ราคาพิเศษเฉพาะกลุ่มนี้ ที่เหลือใช้ราคากลาง */
+      prices: { "p01|u1": 12, "p20|u2": 130 }
+    },
+    {
+      id: "moobaan",
+      name: "หมู่บ้านสุขใจ",
+      productIds: ["p01", "p02", "p04", "p06", "p07", "p08", "p10", "p12", "p14", "p20"],
+      addressMode: "ask",
+      fixedAddress: "",
+      allowOther: true,
+      prices: {}
+    }
+  ];
+
+  /* รอบส่ง = ลิงก์ 1 อัน สร้างรอบครั้งเดียวได้ลิงก์เลย */
+  var LINKS = [
+    { id: "l1", groupId: "bni",     slug: "bni-1208",  date: "พุธ 12 ส.ค.",
+      time: "11:30 – 12:30 น.", cutoff: "อังคาร 11 ส.ค. 20:00 น.",
+      status: "เปิดรับ", orders: 7, pending: 2, total: 1980 },
+    { id: "l2", groupId: "moobaan", slug: "sukjai-1208", date: "พุธ 12 ส.ค.",
+      time: "17:00 – 19:00 น.", cutoff: "พุธ 12 ส.ค. 15:00 น.",
+      status: "เปิดรับ", orders: 4, pending: 0, total: 1240 }
+  ];
+
+  /* ตอนเปิดไฟล์จากเครื่องจะยังไม่มีชื่อโดเมน ใส่ตัวอย่างไว้ให้เห็นภาพ */
+  var HOST = location.host || "ร้านผัก.com";
+
+  function groupById(id) {
+    for (var i = 0; i < GROUPS.length; i++) { if (GROUPS[i].id === id) return GROUPS[i]; }
+    return null;
+  }
+  function linkOfGroup(id) {
+    for (var i = 0; i < LINKS.length; i++) { if (LINKS[i].groupId === id) return LINKS[i]; }
+    return null;
+  }
+
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var el = function (t, c, txt) {
     var n = document.createElement(t);
@@ -622,6 +782,7 @@
   var SCREENS = [
     { tab: "#tab-shop",   screen: "#screen-shop",   key: "shop" },
     { tab: "#tab-prices", screen: "#screen-prices", key: "prices" },
+    { tab: "#tab-groups", screen: "#screen-groups", key: "groups" },
     { tab: "#tab-print",  screen: "#screen-print",  key: "print" }
   ];
   function show(which) {
@@ -643,21 +804,135 @@
   var query = "";
   var picked = {};   /* productId -> unitId ที่ลูกค้าเลือกอยู่ */
   var cart   = {};   /* productId|unitId -> จำนวน */
+  var others = [];   /* รายการ "อื่นๆ" ที่ลูกค้าพิมพ์เอง ยังไม่มีราคา */
+  var viewMode = "public";   /* public = หน้าเว็บหลัก, หรือรหัสกลุ่มถ้าเข้ามาทางลิงก์ */
+
+  /* ราคาที่ลูกค้าเห็นจริง: ถ้ากลุ่มตั้งราคาพิเศษไว้ให้ใช้ราคานั้น ถ้าไม่ตั้งใช้ราคากลาง */
+  function effPrice(p, u, groupId) {
+    var g = groupId && groupId !== "public" ? groupById(groupId) : null;
+    if (g && g.prices[p.id + "|" + u.id] !== undefined) return g.prices[p.id + "|" + u.id];
+    return u.price;
+  }
+  function hasOwnPrice(g, p, u) {
+    return !!g && g.prices[p.id + "|" + u.id] !== undefined;
+  }
+  function currentGroup() {
+    return viewMode === "public" ? null : groupById(viewMode);
+  }
+
+  /* ตัวสลับว่าลูกค้าเข้ามาทางไหน — เป็นส่วนของ mockup ไม่ใช่ของเว็บจริง */
+  var VIEWS = [{ id: "public", label: "เปิดจากหน้าเว็บหลัก" }].concat(
+    GROUPS.map(function (g) { return { id: g.id, label: "เปิดจากลิงก์ " + g.name }; })
+  );
+  var viewWrap = $("#view-modes");
+  VIEWS.forEach(function (v) {
+    var b = el("button", "chip", v.label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(v.id === viewMode));
+    b.addEventListener("click", function () {
+      viewMode = v.id;
+      cart = {}; others = []; activeCat = "all"; query = "";
+      $("#q").value = "";
+      Array.prototype.forEach.call(viewWrap.children, function (x, i) {
+        x.setAttribute("aria-pressed", String(VIEWS[i].id === viewMode));
+      });
+      renderShopHead();
+      renderLinkBar();
+      renderChips();
+      renderShop();
+      renderCart();
+    });
+    viewWrap.appendChild(b);
+  });
+
+  function renderShopHead() {
+    var g = currentGroup();
+    var note = $("#head-note");
+    note.textContent = "";
+
+    if (!g) {
+      $("#view-hint").textContent =
+        "ลูกค้าทั่วไปเข้าหน้าเว็บหลัก เห็นสินค้าทุกอย่าง แล้วเลือกรอบส่งเองตอนสั่ง";
+      note.appendChild(el("span", null, "📣"));
+      note.appendChild(el("span", null,
+        "วันนี้ผักบุ้งเพิ่งเก็บเช้านี้ ปิดรับออเดอร์ 15:00 น. ส่งรอบเย็นวันเดียวกัน"));
+      $("#linkbar") && $("#linkbar").remove();
+      return;
+    }
+
+    var lk = linkOfGroup(g.id);
+    $("#view-hint").textContent = "ลิงก์นี้: " + HOST + "/r/" + lk.slug +
+      " — วันส่งล็อกไว้แล้ว ลูกค้าไม่ต้องเลือก" +
+      (g.addressMode === "fixed" ? " และไม่ต้องกรอกที่อยู่" : "");
+    note.appendChild(el("span", null, "🔗"));
+    note.appendChild(el("span", null,
+      "คุณกำลังสั่งผ่านลิงก์ของ " + g.name + " · ปิดรับ " + lk.cutoff));
+  }
+
+  /* แถบสรุปของลิงก์ วางไว้ใต้หัวเว็บ */
+  function renderLinkBar() {
+    var old = $("#linkbar");
+    if (old) old.remove();
+    var g = currentGroup();
+    if (!g) return;
+    var lk = linkOfGroup(g.id);
+
+    var bar = el("div", "linkbar");
+    bar.id = "linkbar";
+
+    var top = el("div", "linkbar-top");
+    top.appendChild(el("div", "linkbar-name", g.name));
+    top.appendChild(el("span", "pill", "ล็อกวันส่งแล้ว"));
+    if (g.addressMode === "fixed") top.appendChild(el("span", "pill soft", "ไม่ต้องกรอกที่อยู่"));
+    bar.appendChild(top);
+
+    function line(label, value) {
+      var d = el("div", "linkbar-line");
+      d.appendChild(el("b", null, label));
+      d.appendChild(el("span", null, value));
+      bar.appendChild(d);
+    }
+    line("วันส่ง", lk.date + " · " + lk.time);
+    line("ปิดรับ", lk.cutoff);
+    if (g.addressMode === "fixed") line("จุดรับของ", g.fixedAddress);
+
+    var head = $("#screen-shop .shop-head");
+    head.parentNode.insertBefore(bar, head.nextSibling);
+  }
+
+  /* สินค้าที่ลิงก์นี้ขาย — หน้าเว็บหลักเห็นทุกอย่าง ลิงก์กลุ่มเห็นเฉพาะที่เจ้าของเลือกไว้ */
+  function productsInView() {
+    var g = currentGroup();
+    if (!g) return PRODUCTS.slice();
+    return g.productIds.map(function (id) {
+      for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) return PRODUCTS[i]; }
+      return null;
+    }).filter(Boolean);
+  }
 
   var chipWrap = $("#chips");
-  CATEGORIES.forEach(function (c) {
-    var b = el("button", "chip", c.name);
-    b.type = "button";
-    b.setAttribute("aria-pressed", String(c.id === activeCat));
-    b.addEventListener("click", function () {
-      activeCat = c.id;
-      Array.prototype.forEach.call(chipWrap.children, function (x, i) {
-        x.setAttribute("aria-pressed", String(CATEGORIES[i].id === activeCat));
-      });
-      renderShop();
+  function renderChips() {
+    chipWrap.textContent = "";
+    var inView = productsInView();
+    /* โชว์เฉพาะหมวดที่มีสินค้าจริงในลิงก์นี้ ถ้าเหลือหมวดเดียวก็ไม่ต้องโชว์เลย */
+    var cats = CATEGORIES.filter(function (c) {
+      if (c.id === "all") return true;
+      return inView.some(function (p) { return p.cat === c.id; });
     });
-    chipWrap.appendChild(b);
-  });
+    if (cats.length <= 2) { chipWrap.hidden = true; activeCat = "all"; return; }
+    chipWrap.hidden = false;
+    cats.forEach(function (c) {
+      var b = el("button", "chip", c.name);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(c.id === activeCat));
+      b.addEventListener("click", function () {
+        activeCat = c.id;
+        renderChips();
+        renderShop();
+      });
+      chipWrap.appendChild(b);
+    });
+  }
 
   $("#q").addEventListener("input", function (e) {
     query = e.target.value.trim();
@@ -674,7 +949,8 @@
     var host = $("#products");
     host.textContent = "";
 
-    var list = PRODUCTS.filter(function (p) {
+    var gid  = viewMode;
+    var list = productsInView().filter(function (p) {
       if (activeCat !== "all" && p.cat !== activeCat) return false;
       if (query && p.name.indexOf(query) === -1) return false;
       return true;
@@ -685,6 +961,7 @@
       e.appendChild(el("div", null, "ไม่เจอสินค้าที่ค้นหา"));
       e.appendChild(el("div", null, "ลองพิมพ์ชื่อสั้นลง เช่น “ผัก” หรือ “พริก”"));
       host.appendChild(e);
+      renderOtherCard(host);
       return;
     }
 
@@ -714,7 +991,7 @@
           b.setAttribute("aria-pressed", String(uu.id === u.id));
           b.setAttribute("data-fk", "unit:" + p.id + ":" + uu.id);
           b.appendChild(el("span", "u-label", uu.label));
-          b.appendChild(el("span", "u-price num", baht(uu.price) + " ฿"));
+          b.appendChild(el("span", "u-price num", baht(effPrice(p, uu, gid)) + " ฿"));
           b.addEventListener("click", function () {
             keepFocus(function () { picked[p.id] = uu.id; renderShop(); });
           });
@@ -723,10 +1000,13 @@
         body.appendChild(units);
       }
 
+      var price = effPrice(p, u, gid);
+
       var buy = el("div", "buy");
       var pr  = el("div", "pricerow");
-      pr.appendChild(el("span", "price-now num", baht(u.price) + " บาท"));
+      pr.appendChild(el("span", "price-now num", baht(price) + " บาท"));
       pr.appendChild(el("span", "price-unit", "ต่อ" + u.label));
+      if (price !== u.price) pr.appendChild(el("span", "pill", "ราคาพิเศษของกลุ่ม"));
       buy.appendChild(pr);
 
       var st = el("div", "stepper");
@@ -754,15 +1034,78 @@
 
       if (qty > 0) {
         var lt = el("div", "line-total");
-        lt.appendChild(el("span", null, baht(qty) + " " + u.label + " × " + baht(u.price) + " ฿"));
-        lt.appendChild(el("span", "num", baht(qty * u.price) + " บาท"));
+        lt.appendChild(el("span", null, baht(qty) + " " + u.label + " × " + baht(price) + " ฿"));
+        lt.appendChild(el("span", "num", baht(qty * price) + " บาท"));
         body.appendChild(lt);
       }
 
       card.appendChild(body);
       host.appendChild(card);
     });
+
+    renderOtherCard(host);
   }
+
+  /* ── ช่อง "อื่นๆ" — ลูกค้าพิมพ์ของที่ไม่มีในรายการ ยังไม่มีราคาจนกว่าร้านจะยืนยัน ── */
+  function renderOtherCard(host) {
+    var g = currentGroup();
+    if (!g || !g.allowOther) return;
+
+    var card = el("div", "other-card");
+    card.appendChild(el("div", "other-title", "อยากได้อย่างอื่นที่ไม่มีในรายการ?"));
+    card.appendChild(el("div", "other-hint",
+      "พิมพ์บอกได้เลย เช่น “ขิงอ่อน 2 ขีด” หรือ “มะเขือเทศราชินี 1 กก.” " +
+      "ทางร้านจะเช็กราคาแล้วแจ้งกลับก่อนจัดของ ยอดนี้ยังไม่รวมในราคาด้านล่าง"));
+
+    var ta = el("textarea", "other-input");
+    ta.placeholder = "พิมพ์ชื่อของกับจำนวนที่อยากได้";
+    ta.setAttribute("aria-label", "พิมพ์สินค้าที่ไม่มีในรายการ");
+    ta.value = otherDraft;
+    ta.addEventListener("input", function () {
+      otherDraft = ta.value;
+      addBtn.disabled = !otherDraft.trim();
+    });
+    card.appendChild(ta);
+
+    var addBtn = el("button", "other-add", "เพิ่มเข้าตะกร้า (รอร้านยืนยันราคา)");
+    addBtn.type = "button";
+    addBtn.disabled = !otherDraft.trim();
+    addBtn.addEventListener("click", function () {
+      var text = otherDraft.trim();
+      if (!text) return;
+      others.push(text);
+      otherDraft = "";
+      renderShop();
+      renderCart();
+      toast("เพิ่มแล้ว ทางร้านจะแจ้งราคากลับก่อนจัดของ");
+    });
+    card.appendChild(addBtn);
+
+    if (others.length) {
+      var listBox = el("div", "other-list");
+      others.forEach(function (t, i) {
+        var row = el("div", "other-item");
+        var txt = el("div", "other-item-text");
+        txt.appendChild(el("div", null, t));
+        txt.appendChild(el("div", "other-item-tag", "⏳ รอร้านยืนยันราคา"));
+        row.appendChild(txt);
+        var del = el("button", "other-del", "ลบ");
+        del.type = "button";
+        del.setAttribute("aria-label", "ลบรายการ " + t);
+        del.addEventListener("click", function () {
+          others.splice(i, 1);
+          renderShop();
+          renderCart();
+        });
+        row.appendChild(del);
+        listBox.appendChild(row);
+      });
+      card.appendChild(listBox);
+    }
+
+    host.appendChild(card);
+  }
+  var otherDraft = "";
 
   function bump(key, delta) {
     var next = (cart[key] || 0) + delta;
@@ -780,48 +1123,133 @@
         if (PRODUCTS[i].id !== parts[0]) continue;
         for (var j = 0; j < PRODUCTS[i].units.length; j++) {
           if (PRODUCTS[i].units[j].id === parts[1]) {
-            total += PRODUCTS[i].units[j].price * cart[k];
+            total += effPrice(PRODUCTS[i], PRODUCTS[i].units[j], viewMode) * cart[k];
             items += 1;
           }
         }
       }
     });
+
+    var countEl = $("#cart-count");
+    countEl.textContent = "";
+    if (!items && !others.length) {
+      countEl.textContent = "ยังไม่ได้เลือกสินค้า";
+    } else {
+      var parts2 = [];
+      if (items) parts2.push(items + " รายการในตะกร้า");
+      if (others.length) parts2.push(others.length + " รายการรอยืนยันราคา");
+      countEl.textContent = parts2.join(" · ");
+    }
+
     $("#cart-total").textContent = baht(total) + " บาท";
-    $("#cart-count").textContent = items ? items + " รายการในตะกร้า" : "ยังไม่ได้เลือกสินค้า";
-    $("#checkout").disabled = items === 0;
-    $("#checkout").textContent = items ? "สั่งซื้อ" : "ดูตะกร้า";
+
+    var pn = $("#pending-note");
+    if (pn) pn.remove();
+    if (others.length) {
+      var note = el("div", "pending-note", "ยอดนี้ยังไม่รวมของที่รอร้านยืนยันราคา");
+      note.id = "pending-note";
+      countEl.parentNode.appendChild(note);
+    }
+
+    var canOrder = items > 0 || others.length > 0;
+    $("#checkout").disabled = !canOrder;
+    $("#checkout").textContent = canOrder ? "สั่งซื้อ" : "ดูตะกร้า";
   }
 
   $("#checkout").addEventListener("click", function () {
-    toast("ไปหน้ากรอกชื่อ–เบอร์–ที่อยู่ (ยังไม่ได้ทำในตัวอย่างนี้)");
+    var g = currentGroup();
+    if (!g) {
+      toast("ไปหน้ากรอกชื่อ–เบอร์–ที่อยู่ แล้วเลือกรอบส่ง (ยังไม่ได้ทำในตัวอย่างนี้)");
+    } else if (g.addressMode === "fixed") {
+      toast("ไปหน้ากรอกแค่ชื่อกับเบอร์ · วันส่งและจุดรับของล็อกไว้แล้ว");
+    } else {
+      toast("ไปหน้ากรอกชื่อ–เบอร์–ที่อยู่ · วันส่งล็อกไว้แล้วไม่ต้องเลือก");
+    }
   });
 
   /* ════════════════════════════════════════════════════════════════════
      หน้าที่ 2 — หลังบ้าน แก้ราคาประจำวัน
   ════════════════════════════════════════════════════════════════════ */
-  var draft = {};      /* productId|unitId -> ราคาใหม่ */
+  var draft = {};      /* ขอบเขต::productId|unitId -> ราคาใหม่ (null = กลับไปใช้ราคากลาง) */
   var draftOn = {};    /* productId -> เปิด/ปิดขาย */
   var aQuery = "";
   var openHist = {};
+  var priceScope = "base";   /* base = ราคากลางใช้ทุกที่ หรือรหัสกลุ่มถ้าตั้งราคาเฉพาะกลุ่ม */
 
   $("#aq").addEventListener("input", function (e) {
     aQuery = e.target.value.trim();
     renderPrices();
   });
 
-  function priceOf(p, u) {
+  /* ตัวเลือกว่ากำลังแก้ราคาของใคร */
+  var SCOPES = [{ id: "base", label: "ราคากลาง (ใช้ทุกที่)" }].concat(
+    GROUPS.map(function (g) { return { id: g.id, label: g.name }; })
+  );
+  var scopeWrap = $("#price-groups");
+  SCOPES.forEach(function (s) {
+    var b = el("button", "chip", s.label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(s.id === priceScope));
+    b.addEventListener("click", function () {
+      priceScope = s.id;
+      Array.prototype.forEach.call(scopeWrap.children, function (x, i) {
+        x.setAttribute("aria-pressed", String(SCOPES[i].id === priceScope));
+      });
+      renderPrices();
+    });
+    scopeWrap.appendChild(b);
+  });
+
+  function dk(p, u) { return priceScope + "::" + p.id + "|" + u.id; }
+
+  /* ราคาที่บันทึกไว้จริงในขอบเขตนี้ — null แปลว่ากลุ่มนี้ยังใช้ราคากลางอยู่ */
+  function storedPrice(p, u) {
+    if (priceScope === "base") return u.price;
+    var g = groupById(priceScope);
     var k = p.id + "|" + u.id;
-    return draft[k] !== undefined ? draft[k] : u.price;
+    return g.prices[k] !== undefined ? g.prices[k] : null;
+  }
+  /* ราคาที่กำลังจะบันทึก (รวมสิ่งที่เพิ่งแก้แต่ยังไม่กดบันทึก) */
+  function currentPrice(p, u) {
+    var k = dk(p, u);
+    return draft[k] !== undefined ? draft[k] : storedPrice(p, u);
+  }
+  function priceOf(p, u) {
+    var c = currentPrice(p, u);
+    return c === null ? u.price : c;
+  }
+  function usingBase(p, u)  { return currentPrice(p, u) === null; }
+  function isChanged(p, u)  {
+    var k = dk(p, u);
+    return draft[k] !== undefined && draft[k] !== storedPrice(p, u);
   }
   function onOf(p) {
     return draftOn[p.id] !== undefined ? draftOn[p.id] : p.on;
+  }
+
+  function scopeProducts() {
+    if (priceScope === "base") return PRODUCTS.slice();
+    var g = groupById(priceScope);
+    return g.productIds.map(function (id) {
+      for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) return PRODUCTS[i]; }
+      return null;
+    }).filter(Boolean);
   }
 
   function renderPrices() {
     var host = $("#price-rows");
     host.textContent = "";
 
-    var list = PRODUCTS.filter(function (p) { return !aQuery || p.name.indexOf(aQuery) !== -1; });
+    var list = scopeProducts().filter(function (p) { return !aQuery || p.name.indexOf(aQuery) !== -1; });
+
+    var note = $("#scope-note");
+    if (priceScope === "base") {
+      note.textContent = "กำลังแก้ราคากลาง แก้ที่นี่ที่เดียวมีผลกับทุกลิงก์ ยกเว้นกลุ่มที่ตั้งราคาเฉพาะไว้";
+    } else {
+      var gg = groupById(priceScope);
+      note.textContent = "กำลังแก้ราคาเฉพาะกลุ่ม " + gg.name + " (" + gg.productIds.length +
+                         " รายการ) · ช่องที่ยังไม่ตั้งจะใช้ราคากลางตามเดิม";
+    }
 
     if (!list.length) {
       host.appendChild(el("div", "empty", "ไม่เจอสินค้าชื่อนี้"));
@@ -858,45 +1286,71 @@
       row.appendChild(head);
 
       p.units.forEach(function (u) {
-        var k       = p.id + "|" + u.id;
+        var k       = dk(p, u);
         var val     = priceOf(p, u);
-        var changed = val !== u.price;
+        var changed = isChanged(p, u);
+        var onBase  = usingBase(p, u);
 
         var ur = el("div", "urow" + (changed ? " changed" : ""));
 
         var meta = el("div", "u-meta");
-        meta.appendChild(el("div", "u-name", "ราคาต่อ" + u.label));
+        var nameLine = el("div", "u-name", "ราคาต่อ" + u.label);
+        if (priceScope !== "base") {
+          nameLine.appendChild(el("span", "u-badge" + (onBase ? " base" : ""),
+                                  onBase ? "ใช้ราคากลาง" : "ราคาเฉพาะกลุ่ม"));
+        }
+        meta.appendChild(nameLine);
+
         var was = el("div", "u-was");
+        var prev = storedPrice(p, u);
         if (changed) {
-          was.appendChild(document.createTextNode("เดิม " + baht(u.price) + " ฿ → "));
+          was.appendChild(document.createTextNode(
+            "เดิม " + (prev === null ? "ราคากลาง " + baht(u.price) : baht(prev)) + " ฿ → "));
           was.appendChild(el("strong", null, baht(val) + " ฿"));
+        } else if (priceScope !== "base" && onBase) {
+          was.textContent = "ราคากลางตอนนี้ " + baht(u.price) + " ฿";
         } else {
           was.textContent = "เมื่อวาน " + baht(u.was) + " ฿";
         }
         meta.appendChild(was);
+
+        /* ปุ่มสลับระหว่างใช้ราคากลาง กับ ตั้งราคาเฉพาะกลุ่มนี้ */
+        if (priceScope !== "base") {
+          var sw = el("button", "u-link",
+                      onBase ? "ตั้งราคาเฉพาะกลุ่มนี้" : "กลับไปใช้ราคากลาง");
+          sw.type = "button";
+          sw.setAttribute("data-fk", "swap:" + k);
+          sw.addEventListener("click", function () {
+            setPrice(p, u, onBase ? u.price : null);
+          });
+          meta.appendChild(sw);
+        }
         ur.appendChild(meta);
 
         var pe = el("div", "price-edit");
         var dn = el("button", "pbtn", "−");
         dn.type = "button";
+        dn.disabled = onBase && priceScope !== "base";
         dn.setAttribute("aria-label", "ลดราคา " + p.name + " ต่อ " + u.label);
         dn.setAttribute("data-fk", "down:" + k);
-        dn.addEventListener("click", function () { setPrice(k, Math.max(0, val - 1)); });
+        dn.addEventListener("click", function () { setPrice(p, u, Math.max(0, val - 1)); });
 
         var inp = el("input", "price-input num");
         inp.type = "text"; inp.inputMode = "decimal"; inp.value = baht(val);
+        inp.disabled = onBase && priceScope !== "base";
         inp.setAttribute("aria-label", "ราคา " + p.name + " ต่อ " + u.label + " บาท");
         inp.addEventListener("change", function () {
           var n = parseFloat(inp.value.replace(/[^\d.]/g, ""));
-          if (isNaN(n) || n < 0) { n = u.price; toast("ใส่ได้เฉพาะตัวเลข ระบบคืนราคาเดิมให้แล้ว"); }
-          setPrice(k, Math.round(n * 100) / 100);
+          if (isNaN(n) || n < 0) { n = val; toast("ใส่ได้เฉพาะตัวเลข ระบบคืนราคาเดิมให้แล้ว"); }
+          setPrice(p, u, Math.round(n * 100) / 100);
         });
 
         var up = el("button", "pbtn", "+");
         up.type = "button";
+        up.disabled = onBase && priceScope !== "base";
         up.setAttribute("aria-label", "เพิ่มราคา " + p.name + " ต่อ " + u.label);
         up.setAttribute("data-fk", "up:" + k);
-        up.addEventListener("click", function () { setPrice(k, val + 1); });
+        up.addEventListener("click", function () { setPrice(p, u, val + 1); });
 
         pe.appendChild(dn); pe.appendChild(inp); pe.appendChild(up);
         ur.appendChild(pe);
@@ -933,16 +1387,10 @@
     updateSaveBar();
   }
 
-  function setPrice(key, value) {
-    var parts = key.split("|");
-    for (var i = 0; i < PRODUCTS.length; i++) {
-      if (PRODUCTS[i].id !== parts[0]) continue;
-      for (var j = 0; j < PRODUCTS[i].units.length; j++) {
-        if (PRODUCTS[i].units[j].id !== parts[1]) continue;
-        if (value === PRODUCTS[i].units[j].price) delete draft[key];
-        else draft[key] = value;
-      }
-    }
+  function setPrice(p, u, value) {
+    var key = dk(p, u);
+    if (value === storedPrice(p, u)) delete draft[key];
+    else draft[key] = value;
     keepFocus(function () { renderPrices(); });
   }
 
@@ -974,14 +1422,22 @@
 
   $("#save").addEventListener("click", function () {
     var n = countChanges();
-    Object.keys(draft).forEach(function (k) {
-      var parts = k.split("|");
+    Object.keys(draft).forEach(function (full) {
+      var scope = full.split("::")[0];
+      var parts = full.split("::")[1].split("|");
+      var value = draft[full];
       PRODUCTS.forEach(function (p) {
         if (p.id !== parts[0]) return;
         p.units.forEach(function (u) {
           if (u.id !== parts[1]) return;
-          u.was = u.price;
-          u.price = draft[k];
+          if (scope === "base") {
+            u.was = u.price;
+            u.price = value;
+          } else {
+            var g = groupById(scope);
+            if (value === null) delete g.prices[parts[0] + "|" + parts[1]];
+            else g.prices[parts[0] + "|" + parts[1]] = value;
+          }
         });
       });
     });
@@ -1205,9 +1661,106 @@
     setTimeout(function () { window.print(); }, 250);
   });
 
+  /* ════════════════════════════════════════════════════════════════════
+     หน้าที่ 3 — หลังบ้าน กลุ่มและลิงก์สั่งซื้อ
+  ════════════════════════════════════════════════════════════════════ */
+  function renderGroups() {
+    var host = $("#groups-body");
+    host.textContent = "";
+
+    GROUPS.forEach(function (g) {
+      var lk  = linkOfGroup(g.id);
+      var row = el("div", "grow");
+
+      var head = el("div", "grow-head");
+      head.appendChild(el("div", "grow-name", g.name));
+      head.appendChild(el("span", "pill", lk.status));
+      if (lk.pending) head.appendChild(el("span", "pill warn", lk.pending + " รายการรอยืนยันราคา"));
+      row.appendChild(head);
+
+      var facts = el("div", "grow-facts");
+      function fact(label, value) {
+        var d = el("div", "fact");
+        d.appendChild(el("b", null, label));
+        d.appendChild(el("span", null, value));
+        facts.appendChild(d);
+      }
+      fact("วันส่ง", lk.date + " · " + lk.time);
+      fact("ปิดรับออเดอร์", lk.cutoff);
+      fact("ที่อยู่ลูกค้า", g.addressMode === "fixed"
+        ? "ไม่ต้องกรอก — ส่งจุดเดียวกันทั้งกลุ่ม"
+        : "ให้ลูกค้ากรอกที่อยู่เอง");
+      if (g.addressMode === "fixed") fact("จุดรับของ", g.fixedAddress);
+      fact("ช่องอื่นๆ", g.allowOther
+        ? "เปิด — ลูกค้าพิมพ์ขอของนอกรายการได้ ต้องยืนยันราคาก่อน"
+        : "ปิด");
+      fact("ออเดอร์ในรอบนี้", lk.orders + " ราย · รวม " + baht(lk.total) + " บาท");
+      row.appendChild(facts);
+
+      var items = el("div", "grow-items");
+      g.productIds.forEach(function (id) {
+        var p = null;
+        for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) p = PRODUCTS[i]; }
+        if (!p) return;
+        var special = p.units.some(function (u) { return hasOwnPrice(g, p, u); });
+        var tag = el("span", "item-tag");
+        tag.appendChild(document.createTextNode(p.emoji + " " + p.name));
+        if (special) tag.appendChild(el("b", null, " · ราคาพิเศษ"));
+        items.appendChild(tag);
+      });
+      row.appendChild(items);
+
+      var box = el("div", "linkbox");
+      box.appendChild(el("div", "linkbox-url", HOST + "/r/" + lk.slug));
+      var btns = el("div", "linkbox-btns");
+
+      var copy = el("button", "mini-btn primary", "คัดลอกลิงก์");
+      copy.type = "button";
+      copy.addEventListener("click", function () {
+        toast("คัดลอกลิงก์ของ " + g.name + " แล้ว เอาไปแปะในกลุ่มไลน์ได้เลย");
+      });
+      var open = el("button", "mini-btn", "ดูหน้าที่ลูกค้าเห็น");
+      open.type = "button";
+      open.addEventListener("click", function () {
+        viewMode = g.id;
+        cart = {}; others = []; activeCat = "all"; query = ""; $("#q").value = "";
+        Array.prototype.forEach.call(viewWrap.children, function (x, i) {
+          x.setAttribute("aria-pressed", String(VIEWS[i].id === viewMode));
+        });
+        renderShopHead(); renderLinkBar(); renderChips(); renderShop(); renderCart();
+        show("shop");
+      });
+      var edit = el("button", "mini-btn", "แก้สินค้าในกลุ่ม");
+      edit.type = "button";
+      edit.addEventListener("click", function () {
+        toast("ไปหน้าเลือกสินค้าและตั้งราคาของกลุ่ม (ยังไม่ได้ทำในตัวอย่างนี้)");
+      });
+
+      btns.appendChild(copy); btns.appendChild(open); btns.appendChild(edit);
+      box.appendChild(btns);
+      row.appendChild(box);
+
+      host.appendChild(row);
+    });
+
+    var add = el("div", "grow");
+    var addBtn = el("button", "cta", "+ สร้างรอบส่งใหม่ (ได้ลิงก์ทันที)");
+    addBtn.type = "button";
+    addBtn.style.width = "100%";
+    addBtn.addEventListener("click", function () {
+      toast("เลือกกลุ่ม ใส่วันที่ส่ง กดสร้าง แล้วได้ลิงก์เลย (ยังไม่ได้ทำในตัวอย่างนี้)");
+    });
+    add.appendChild(addBtn);
+    host.appendChild(add);
+  }
+
+  renderShopHead();
+  renderLinkBar();
+  renderChips();
   renderShop();
   renderCart();
   renderPrices();
+  renderGroups();
   renderPapers();
 })();
 </script>
